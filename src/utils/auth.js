@@ -1,34 +1,46 @@
+import { cookies } from 'next/headers';
 import { verify } from 'jsonwebtoken';
 
+// Use the same secret as in your login route
+const JWT_SECRET = process.env.JWT_SECRET;
+
 /**
- * Extracts and verifies user information from a JWT token
- * @param {string} token - The JWT token to verify
- * @returns {Object|null} The decoded token payload or null if invalid
+ * Get user information from the JWT token stored in cookies
+ * @returns {Object|null} The decoded token payload or null if not authenticated
  */
-export function extractUserFromToken(token) {
-  if (!token) return null;
-  
+export function getUserFromToken() {
   try {
-    // Verify the token using the secret key
-    const decoded = verify(token, process.env.JWT_SECRET);
+    // Get the cookie
+    const cookieStore = cookies();
+    const token = cookieStore.get('auth-token')?.value;
     
-    // Return user information
-    return {
-      id: decoded.id,
-      username: decoded.username,
-      // Add any other user properties you need
-    };
+    if (!token) {
+      return null;
+    }
+
+    // Verify and decode the token
+    const decoded = verify(token, JWT_SECRET);
+    return decoded;
   } catch (error) {
-    console.error('Token verification failed:', error.message);
+    console.error('Error getting user from token:', error);
     return null;
   }
 }
 
 /**
- * Checks if a token is valid and not expired
- * @param {string} token - The JWT token to check
- * @returns {boolean} Whether the token is valid
+ * Check if the user is authenticated
+ * @returns {boolean} True if authenticated, false otherwise
  */
-export function isValidToken(token) {
-  return !!extractUserFromToken(token);
+export function isAuthenticated() {
+  return getUserFromToken() !== null;
+}
+
+/**
+ * Get a specific user property from the token
+ * @param {string} property - The property to retrieve (e.g., 'username', 'id')
+ * @returns {any|null} The property value or null if not authenticated or property doesn't exist
+ */
+export function getUserProperty(property) {
+  const user = getUserFromToken();
+  return user ? user[property] : null;
 }
