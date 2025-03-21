@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import './login.css';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ export default function Login() {
     password: '',
   });
 
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [loginSuccess, setLoginSuccess] = useState(false);
@@ -82,7 +84,7 @@ export default function Login() {
       // Handle successful login
       setLoginSuccess(true);
       setTimeout(() => {
-        window.location.href = '/'; // Example redirect
+        router.push('/');
       }, 1000);
 
     } catch (err) {
