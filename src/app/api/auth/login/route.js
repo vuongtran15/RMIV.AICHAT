@@ -4,7 +4,7 @@ import { sign } from 'jsonwebtoken';
 
 // This would normally come from a database
 const USERS = [
-  { id: 1, username: 'admin', password: 'admin123' },
+  { id: 1, username: 'kito', password: '1' },
   { id: 2, username: 'user', password: 'user123' }
 ];
 
