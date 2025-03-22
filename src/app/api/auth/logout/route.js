@@ -5,7 +5,6 @@ export async function POST() {
   try {
     // Clear the auth token cookie
     const cookieStore = cookies();
-    cookieStore.delete('auth-token');
 
     return NextResponse.json({ 
       success: true, 

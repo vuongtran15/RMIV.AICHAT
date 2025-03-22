@@ -13,14 +13,14 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
-  
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({
       ...formData,
       [id]: value
     });
-    
+
     // Clear error when user types
     if (errors[id]) {
       setErrors({
@@ -29,7 +29,7 @@ export default function Login() {
       });
     }
   };
-  
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.username.trim()) {
@@ -38,17 +38,17 @@ export default function Login() {
     if (!formData.password) {
       newErrors.password = 'Password is required';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       setIsSubmitting(true);
-      
+
       try {
         // Make an API call to the login endpoint
         const response = await fetch('/api/auth/login', {
@@ -61,13 +61,12 @@ export default function Login() {
             password: formData.password
           }),
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
           // Set login success state
           setLoginSuccess(true);
-          
           // Wait for 1 second before redirecting
           setTimeout(() => {
             router.push('/'); // Redirect to dashboard after login
@@ -148,34 +147,34 @@ export default function Login() {
       <div className="login-form">
         <div className='login-body'>
           <div className='login-header'>
-            <img src="/images/logo.png" className='logo'/>
+            <img src="/images/logo.png" className='logo' />
             <div className='login-title'>ROS</div>
           </div>
           <div className='form-content'>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="username">Username</label>
-                <input 
-                  type="text" 
-                  id="username" 
+                <input
+                  type="text"
+                  id="username"
                   value={formData.username}
                   onChange={handleChange}
                   className={errors.username ? 'error' : ''}
                   autoComplete='off'
-                  required 
+                  required
                 />
                 {errors.username && <div className="error-message">{errors.username}</div>}
               </div>
               <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <input 
-                  type="password" 
-                  id="password" 
+                <input
+                  type="password"
+                  id="password"
                   value={formData.password}
                   onChange={handleChange}
                   autoComplete='off'
                   className={errors.password ? 'error' : ''}
-                  required 
+                  required
                 />
                 {errors.password && <div className="error-message">{errors.password}</div>}
               </div>
@@ -188,8 +187,8 @@ export default function Login() {
               </div>
               {errors.general && <div className="general-error">{errors.general}</div>}
               {loginSuccess && <div className="success-message">Login successful! Redirecting...</div>}
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className={`login-button ${loginSuccess ? 'success' : ''}`}
                 disabled={isSubmitting || loginSuccess}
               >
