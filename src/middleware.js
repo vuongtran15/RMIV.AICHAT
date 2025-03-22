@@ -10,6 +10,12 @@ export function middleware(request) {
   const authToken = request.cookies.get('auth-token')?.value;
   console.log('Auth token:', authToken);
   
+  // If the path is exactly '/', redirect to chat page
+  if (path === '/') {
+    console.log('Root path detected, redirecting to chat page');
+    return NextResponse.redirect(new URL('/chat', request.url));
+  }
+  
   // If the path is not login and user is not authenticated, redirect to login
   if (!authToken && path !== '/login') {
     console.log('Redirecting to login');
