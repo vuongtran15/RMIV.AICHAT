@@ -1,10 +1,13 @@
 import React from 'react';
+import './page.scss';
 
 const ChatPage = () => {
     return (
-        <div>
-            <h1>Chat Page</h1>
-            <p>Welcome to the chat page!</p>
+        <div className='chat-page'>
+            <div className='chat-catgory'>1</div>
+            <div className='chat-content'>
+                23
+            </div>
         </div>
     );
 };
