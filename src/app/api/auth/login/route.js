@@ -4,8 +4,8 @@ import { sign } from 'jsonwebtoken';
 
 // This would normally come from a database
 const USERS = [
-  { id: 1, username: 'kito', password: '1' },
-  { id: 2, username: 'user', password: 'user123' }
+  { id: 1, username: 'kito', password: '1',empid:"A246780" },
+  { id: 2, username: 'user', password: 'user123', empid:"A246781" },
 ];
 
 // In production, use a secure environment variable for the secret
@@ -32,6 +32,7 @@ export async function POST(request) {
       { 
         id: user.id, 
         username: user.username,
+        empid: user.empid,
         // Don't include sensitive data like password in the token
       },
       JWT_SECRET,
