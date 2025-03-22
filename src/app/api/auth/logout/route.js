@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { fnRemoveTokenFromLocalStorage } from '@/utils/local';
 
 export async function POST() {
   try {
     // Clear the auth token cookie
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
+    cookieStore.delete('auth-token');
+    
 
     return NextResponse.json({ 
       success: true, 

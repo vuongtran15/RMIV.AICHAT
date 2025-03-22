@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import './login.scss';
 import { useRouter } from 'next/navigation';
-import { fnSaveTokenToLocalStorage } from '@/utils/local';
+import { fnRemoveTokenFromLocalStorage, fnSaveTokenToLocalStorage } from '@/utils/local';
 
 export default function Login() {
   const router = useRouter();
@@ -14,6 +14,10 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    fnRemoveTokenFromLocalStorage();
+  }, []);
 
   const handleChange = (e) => {
     const { id, value } = e.target;

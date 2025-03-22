@@ -9,6 +9,7 @@ export function TokenSyncProvider({ children }) {
     const cookieToken = Cookies.get('auth-token');
     if (!cookieToken) {
       const localToken = fnGetTokenFromLocalStorage();
+      console.log('Local token:', localToken);
       if (localToken) {
         Cookies.set('auth-token', localToken, {
           expires: 7,

@@ -11,8 +11,17 @@ export function fnGetTokenFromLocalStorage() {
     return localStorage.getItem('auth-token');
 }
 export function fnRemoveTokenFromLocalStorage() {
-    if (typeof window !== 'undefined') {
-        console.log('Removing token from local storage');
-        localStorage.removeItem('auth-token');
+    try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+            console.log('Removing token from local storage');
+            window.localStorage.removeItem('auth-token');
+            // Verify the token was actually removed
+            const token = window.localStorage.getItem('auth-token');
+            if (!token) {
+                console.log('Token successfully removed');
+            }
+        }
+    } catch (error) {
+        console.error('Error removing token from localStorage:', error);
     }
 }

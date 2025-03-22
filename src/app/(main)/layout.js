@@ -7,6 +7,7 @@ import { FiMessageSquare, FiLogOut } from 'react-icons/fi'
 import { BsWindow } from 'react-icons/bs'
 import { BiGlobe } from 'react-icons/bi'
 import { GoServer, GoHubot, GoSun } from 'react-icons/go'
+import { fnRemoveTokenFromLocalStorage } from '@/utils/local';
 
 export default function LayoutMain({ children }) {
     const router = useRouter();
@@ -23,6 +24,7 @@ export default function LayoutMain({ children }) {
 
             if (response.ok) {
                 // Redirect to login page after successful logout
+                fnRemoveTokenFromLocalStorage();
                 router.push('/login');
             } else {
                 console.error('Logout failed');
