@@ -11,6 +11,8 @@ export default function Login() {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
   
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -48,14 +50,35 @@ export default function Login() {
       setIsSubmitting(true);
       
       try {
-        // Mock login - replace with actual API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Make an API call to the login endpoint
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: formData.username,
+            password: formData.password
+          }),
+        });
         
-        // Simulate successful login
-        localStorage.setItem('isLoggedIn', 'true');
-        router.push('/dashboard'); // Redirect to dashboard after login
+        const data = await response.json();
+        
+        if (data.success) {
+          // Set login success state
+          setLoginSuccess(true);
+          
+          // Wait for 1 second before redirecting
+          setTimeout(() => {
+            router.push('/'); // Redirect to dashboard after login
+          }, 1000);
+        } else {
+          // Failed login with error message from API
+          setErrors({ general: data.message || 'Login failed. Please try again.' });
+        }
       } catch (error) {
-        setErrors({ general: 'Login failed. Please try again.' });
+        console.error('Login error:', error);
+        setErrors({ general: 'Login failed. Please check your connection and try again.' });
       } finally {
         setIsSubmitting(false);
       }
@@ -84,6 +107,22 @@ export default function Login() {
     };
     generateBubbles();
   }, []);
+
+  // Realtime clock effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  // Format time to display hours, minutes, and seconds only
+  const formatTime = (date) => {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
 
   return (
     <div className="login-container">
@@ -148,14 +187,18 @@ export default function Login() {
                 <a href="#" className="forgot-password">Forgot password?</a>
               </div>
               {errors.general && <div className="general-error">{errors.general}</div>}
+              {loginSuccess && <div className="success-message">Login successful! Redirecting...</div>}
               <button 
                 type="submit" 
-                className='login-button'
-                disabled={isSubmitting}
+                className={`login-button ${loginSuccess ? 'success' : ''}`}
+                disabled={isSubmitting || loginSuccess}
               >
-                {isSubmitting ? 'Logging in...' : 'Login'}
+                {isSubmitting ? 'Logging in...' : loginSuccess ? 'Success!' : 'Login'}
               </button>
             </form>
+          </div>
+          <div className="realtime-clock">
+            <div className="time">{formatTime(currentTime)}</div>
           </div>
         </div>
         <div className='login-caption'>

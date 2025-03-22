@@ -7,7 +7,7 @@
   --text-color: #5a314f;
   --error-color: #ff3860;
   --success-color: #23d160;
-  --border-radius: 8px;
+  --border-radius: 5px;
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
 }
@@ -118,6 +118,7 @@
     justify-content: flex-start;
     align-items: center;
     padding: 20px;
+    position: relative;
     
     .login-header {
       margin-top: 30px;
@@ -222,6 +223,17 @@
           font-size: 13px;
         }
         
+        .success-message {
+          background-color: rgba(35, 209, 96, 0.1);
+          color: var(--success-color);
+          padding: 8px 12px;
+          border-radius: var(--border-radius);
+          margin-bottom: 15px;
+          font-size: 13px;
+          text-align: center;
+          animation: fadeInUp 0.3s ease-out;
+        }
+        
         .login-button {
           width: 100%;
           padding: 12px;
@@ -241,7 +253,35 @@
             opacity: 0.7;
             cursor: not-allowed;
           }
+          
+          &.success {
+            background-color: var(--success-color);
+            
+            &:hover {
+              background-color: var(--success-color);
+            }
+          }
         }
+      }
+    }
+    
+    .realtime-clock {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      
+      .time {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--pink-dark);
+        font-family: monospace;
+        letter-spacing: 1px;
+        opacity: 0.8;
       }
     }
   }
@@ -273,6 +313,18 @@
         opacity: 0.9;
       }
     }
+  }
+}
+
+/* Additional keyframes for success animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
