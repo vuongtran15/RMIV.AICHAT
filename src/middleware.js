@@ -3,12 +3,11 @@ import { fnGetTokenFromLocalStorage } from './utils/local';
 
 export function middleware(request) {
   console.log('Middleware triggered');
-  // Get the path that is being accessed
   const path = request.nextUrl.pathname;
   
   // Get auth token from cookies
-  const authToken = request.cookies.get('auth-token')?.value;
-  
+  let authToken = request.cookies.get('auth-token')?.value;
+
   // If the path is exactly '/', redirect to chat page
   if (path === '/') {
     return NextResponse.redirect(new URL('/chat', request.url));
