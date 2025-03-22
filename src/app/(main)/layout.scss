@@ -6,13 +6,13 @@
     display: flex;
     flex-direction: row;
     .main-menu{
-        width: 80px;
+        width: 70px;
         box-sizing: border-box;
-        min-width: 80px;
-        max-width: 80px;
+        min-width: 70px;
+        max-width: 70px;
         background: transparent;
         padding: 10px 0px 10px 0px;
-        padding: 5px;
+        padding: 8px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -46,6 +46,7 @@
                 cursor: pointer;
                 transition: all 0.2s ease;
                 text-decoration: none;
+                gap: 3px;
                 color: white; /* Changed text color to white */
                 
                 img {
