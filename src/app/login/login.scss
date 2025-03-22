@@ -1,0 +1,140 @@
+/* Variables */
+:root {
+  --pink-primary: #ff80ab;
+  --light-bg: #fff0f3;
+  --text-color: #5a314f;
+}
+
+/* Mixins */
+@mixin center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin bubble-animation {
+  position: absolute;
+  bottom: -100px;
+  border-radius: 50%;
+  animation: bubbleFloat linear infinite;
+  z-index: 1;
+}
+
+@mixin stream-animation {
+  position: absolute;
+  width: 2px;
+  height: 80px;
+  opacity: 0.5;
+  animation: streamAnimation linear infinite;
+  box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  z-index: 1;
+}
+
+/* Login Page Styles */
+.login-container {
+  @include center-flex;
+  min-height: 100vh;
+  background-color: var(--light-bg);
+  position: relative;
+  overflow: hidden;
+
+  .bubbles-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+
+    .bubble {
+      @include bubble-animation;
+    }
+  }
+
+  .data-streams {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    .data-stream {
+      @include stream-animation;
+    }
+  }
+}
+
+/* Keyframes */
+@keyframes bubbleFloat {
+  0% {
+    transform: translateY(100vh) scale(0.5);
+  }
+  100% {
+    transform: translateY(-100vh) scale(1);
+  }
+}
+
+@keyframes streamAnimation {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.login-form{
+  background: #f9d7d7;
+  z-index: 99;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 800px;
+  height: 550px;
+  box-sizing: border-box;
+  .login-body{
+    background: #fff;
+    border-radius: 12px;
+    width: 425px;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    .login-header{
+      margin-top: 50px;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      .logo{
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 10px;
+      }
+      .login-tille{
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      
+    }
+  }
+}

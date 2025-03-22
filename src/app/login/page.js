@@ -1,22 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
-import './login.css';
+import './login.scss';
 import { useRouter } from 'next/navigation';
 
 export default function Login() {
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
+ 
 
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [loginSuccess, setLoginSuccess] = useState(false);
 
   // For the animated background effect
   const [bubbles, setBubbles] = useState([]);
-  const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
     // Create animated bubbles in the background
@@ -35,65 +27,11 @@ export default function Login() {
       }
       setBubbles(newBubbles);
     };
-
     generateBubbles();
-
-    // Real-time clock update
-    const updateClock = () => {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const seconds = now.getSeconds().toString().padStart(2, '0');
-      setCurrentTime(`${hours}:${minutes}:${seconds}`);
-    };
-
-    updateClock(); // Initial call
-    const clockInterval = setInterval(updateClock, 1000);
-
-    return () => {
-      clearInterval(clockInterval);
-    };
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing again
-    if (error) setError('');
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    try {
-      // Call authentication API endpoint
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-      // Handle successful login
-      setLoginSuccess(true);
-      setTimeout(() => {
-        router.push('/');
-      }, 1000);
-
-    } catch (err) {
-      setError(err.message);
-      console.error('Login error:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  
 
   return (
     <div className="login-container">
@@ -117,62 +55,26 @@ export default function Login() {
       </div>
 
       <div className="login-form">
-        <div className="cyberpunk-border"></div>
-        <div className="login-content">
-          <h2 className="cyber-glitch">ROS<span className="neon-text"> LOGIN</span></h2>
-          <p className="subtitle">ACCESS TO SYSTEM</p>
-
-          {loginSuccess ? (
-            <div className="success-message">
-              <p>Login successful! Redirecting...</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              {error && <div className="error-message">{error}</div>}
-
-              <div className="holographic-input">
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  autoComplete="off"
-                  required
-                />
-                <div className="input-label">USER ID</div>
-                <div className="input-glow"></div>
+        <div className='login-body'>
+          <div className='login-header'>
+            <img src="/images/logo.png" className='logo'/>
+            <div className='login-title'>ROS</div>
+          </div>
+          <div className='form-content'>
+            <form>
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <input type="text" id="username" required />
               </div>
-
-              <div className="holographic-input">
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  autoComplete="off"
-                />
-                <div className="input-label">PASSWORD</div>
-                <div className="input-glow"></div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" required />
               </div>
-
-              <button
-                type="submit"
-                className={`cyber-button ${isLoading ? 'loading' : ''}`}
-                disabled={isLoading}
-              >
-                <span className="button-text">
-                  {isLoading ? 'PROCESSING...' : 'LOGIN'}
-                </span>
-                <span className="button-glitch"></span>
-              </button>
+              <button type="submit" className='login-button'>Login</button>
             </form>
-          )}
-
-          <div className="login-footer">
-            <div className="cyber-text cyber-clock">{currentTime}</div>
           </div>
         </div>
+        <div className='login-caption'></div>
       </div>
     </div>
   );
