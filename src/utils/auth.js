@@ -44,22 +44,3 @@ export function getUserProperty(property) {
   const user = getUserFromToken();
   return user ? user[property] : null;
 }
-// save token to local storage
-export function saveTokenToLocalStorage(token) {
-  if (typeof window !== 'undefined') {
-    console.log('Saving token to local storage:', token);
-    localStorage.setItem('auth-token', token);
-  }
-}
-// get token from local storage
-export function getTokenFromLocalStorage() {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth-token');
-  }
-  return null;
-}
-export function removeTokenFromLocalStorage() {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('auth-token');
-  }
-}

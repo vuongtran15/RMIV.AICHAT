@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { fnGetTokenFromLocalStorage } from './utils/local';
 
 export function middleware(request) {
   console.log('Middleware triggered');

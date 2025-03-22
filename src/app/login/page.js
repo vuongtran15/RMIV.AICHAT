@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import './login.scss';
 import { useRouter } from 'next/navigation';
+import { fnSaveTokenToLocalStorage } from '@/utils/local';
 
 export default function Login() {
   const router = useRouter();
@@ -67,6 +68,8 @@ export default function Login() {
         if (data.success) {
           // Set login success state
           setLoginSuccess(true);
+          // Save the token to local storage
+          fnSaveTokenToLocalStorage(data.token);
           // Wait for 1 second before redirecting
           setTimeout(() => {
             router.push('/'); // Redirect to dashboard after login
