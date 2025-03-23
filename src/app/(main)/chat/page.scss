@@ -7,13 +7,17 @@
 
     .chat-catgory{
         width: 260px;
-        border-right: 1px solid #ccc;
+        padding: 12px;
+        box-sizing: border-box;
+        border-right: 1px solid rgba(237, 239, 245, .45);
     }
     .chat-content{
         flex: 1;
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        background: linear-gradient(180deg, #eeedfd, #fff 25%, #fff 60%);
+        transition: all .4s ease;
     }
 
 }
