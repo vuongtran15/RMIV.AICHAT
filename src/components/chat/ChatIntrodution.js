@@ -45,7 +45,7 @@ export default function ChatIntrodution() {
                 </div>
             </div>
             <div className="chat-control chat-container container mx-auto px-4 mb-2">
-                <ChatInputControl />
+                <ChatInputControl allowTyping={true} />
             </div>
         </div>
     );

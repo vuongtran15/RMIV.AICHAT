@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HiMiniMicrophone } from "react-icons/hi2";
 import { IoAttachSharp } from "react-icons/io5";
 
-export default function ChatInputControl () {
+export default function ChatInputControl ({allowTyping = true}) {
     const maxLength = 500;
     const [charCount, setCharCount] = useState(0);
     const inputRef = React.useRef(null);
@@ -84,25 +84,26 @@ export default function ChatInputControl () {
         <div className='chat-input-container relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all p-3'>
             <div
                 ref={inputRef}
-                contentEditable
-                className="chat-input w-full min-h-[40px] max-h-32 overflow-y-auto px-2 focus:outline-none"
+                contentEditable={allowTyping}
+                className={`chat-input w-full min-h-[40px] max-h-32 overflow-y-auto px-2 focus:outline-none ${!allowTyping ? 'cursor-not-allowed bg-gray-100' : ''}`}
                 spellCheck="false"
                 data-gramm="false"
                 data-gramm_editor="false"
                 data-enable-grammarly="false"
-                onPaste={handlePaste}
-                onInput={handleInput}
-                onKeyDown={handleKeyDown}
+                onPaste={allowTyping ? handlePaste : undefined}
+                onInput={allowTyping ? handleInput : undefined}
+                onKeyDown={allowTyping ? handleKeyDown : undefined}
                 suppressContentEditableWarning={true}
-                placeholder="Type a message..."
-                onFocus={(e) => e.currentTarget.dataset.placeholder = ''}
+                placeholder={allowTyping ? "Type a message..." : "Chat input is disabled"}
+                onFocus={(e) => allowTyping && (e.currentTarget.dataset.placeholder = '')}
                 onBlur={(e) => {
-                    e.currentTarget.dataset.placeholder = 'Type a message...';
-                    // Recheck count on blur to ensure accuracy
-                    const text = e.currentTarget.innerText.replace(/\u200B/g, '').replace(/\n$/, '');
-                    setCharCount(text.length);
+                    e.currentTarget.dataset.placeholder = allowTyping ? 'Type a message...' : 'Chat input is disabled';
+                    if (allowTyping) {
+                        const text = e.currentTarget.innerText.replace(/\u200B/g, '').replace(/\n$/, '');
+                        setCharCount(text.length);
+                    }
                 }}
-                data-placeholder="Type a message..."
+                data-placeholder={allowTyping ? "Type a message..." : "Chat input is disabled"}
             />
 
             <div className='chat-input-action flex flex-row justify-between items-center mt-2 px-2'>
@@ -114,10 +115,20 @@ export default function ChatInputControl () {
                     </span>
                 </div>
                 <div className='right-items flex flex-row gap-3'>
-                    <button className='action-btn p-1.5 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700'>
+                    <button 
+                        className={`action-btn p-1.5 rounded-full transition-colors text-gray-500 ${
+                            allowTyping ? 'hover:bg-gray-100 hover:text-gray-700' : 'opacity-50 cursor-not-allowed'
+                        }`}
+                        disabled={!allowTyping}
+                    >
                         <IoAttachSharp size={18} />
                     </button>
-                    <button className='action-btn p-1.5 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700'>
+                    <button 
+                        className={`action-btn p-1.5 rounded-full transition-colors text-gray-500 ${
+                            allowTyping ? 'hover:bg-gray-100 hover:text-gray-700' : 'opacity-50 cursor-not-allowed'
+                        }`}
+                        disabled={!allowTyping}
+                    >
                         <HiMiniMicrophone size={18} />
                     </button>
                 </div>
