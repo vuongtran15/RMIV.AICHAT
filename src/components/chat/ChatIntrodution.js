@@ -1,3 +1,7 @@
+import React, { useState } from 'react';
+import { HiMiniMicrophone } from "react-icons/hi2";
+import { IoAttachSharp } from "react-icons/io5";
+
 export default function ChatIntrodution() {
     return (
         <div className='main-chat'>
@@ -39,7 +43,9 @@ export default function ChatIntrodution() {
                     </div>
                 </div>
             </div>
-            <div className="chat-control">3</div>
+            <div className="chat-control chat-container container mx-auto px-4 mb-2">
+                <ChatInput />
+            </div>
         </div>
     );
 }
@@ -57,3 +63,48 @@ function ToolCardBodyItem({ image, title, description }) {
         </div>
     </div>);
 }
+const ChatInput = () => {
+    const [content, setContent] = useState('');
+    const maxLength = 500;
+
+    const handlePaste = (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        const truncatedText = text.slice(0, maxLength);
+        setContent(truncatedText);
+    };
+
+    return (
+        <div className='chat-input-container'>
+            <div
+                contentEditable
+                className="chat-input"
+                spellCheck="false"
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
+                onPaste={handlePaste}
+                suppressContentEditableWarning={true}
+                dangerouslySetInnerHTML={{ __html: content }}
+                placeholder="Type a message..."
+                onFocus={(e) => e.currentTarget.dataset.placeholder = ''}
+                onBlur={(e) => e.currentTarget.dataset.placeholder = 'Type a message...'}
+                data-placeholder="Type a message..."
+            />
+
+            <div className='chat-input-action flex flex-row'>
+                <div className='left-items'>
+                    
+                </div>
+                <div className='right-items fkex flex-row gap-2'>
+                    <div className='action-btn'>
+                        <IoAttachSharp size={15} />
+                    </div>
+                    <div className='action-btn'>
+                        <HiMiniMicrophone size={15} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};

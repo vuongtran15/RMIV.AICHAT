@@ -290,7 +290,7 @@
                                             transform: translateY(-1px);
                                             box-shadow: 0 5px 15px rgba(107, 122, 252, 0.2);
                                             transition: all 0.3s ease;
-                                            
+
                                             &::before {
                                                 content: '';
                                                 position: absolute;
@@ -302,11 +302,19 @@
                                                 border-radius: 16px;
                                                 animation: pulse 1.5s infinite;
                                             }
-                                            
+
                                             @keyframes pulse {
-                                                0% { opacity: 0.6; }
-                                                50% { opacity: 1; }
-                                                100% { opacity: 0.6; }
+                                                0% {
+                                                    opacity: 0.6;
+                                                }
+
+                                                50% {
+                                                    opacity: 1;
+                                                }
+
+                                                100% {
+                                                    opacity: 0.6;
+                                                }
                                             }
                                         }
                                     }
@@ -328,7 +336,7 @@
                                 border: 1px solid #fff;
                             }
 
-                            
+
                         }
 
 
@@ -342,6 +350,64 @@
                 min-height: 70px;
                 box-sizing: border-box;
                 padding: 10px;
+                max-height: 200px;
+                display: inline-table;
+
+                .chat-input {
+                    border: none;
+                    outline: none;
+                    font-size: 14px;
+                    min-height: 50px;
+                    padding: 12px;
+                    line-height: 1.8;
+                    max-height: 200px;
+                    overflow-y: auto;
+
+                    
+
+                    
+                }
+
+                .chat-input-container{
+                    border: 1px solid #e0e0e6;
+                    border-radius: 8px;
+                    background: #f3f3f3ce;
+
+                    .chat-input-action{
+                        padding: 0px 12px 12px 12px;
+                        
+                        .right-items{
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            justify-content: flex-end;
+                            margin-left: auto;
+                        }
+
+                        .action-btn{
+                            width: 28px;
+                            height: 28px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 0;
+                            border: none;
+                            color: #fff;
+                            background:#babaff;
+                            border-radius: 50%;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            
+                            &:hover {
+                                background: #6b7afc;
+                                transform: translateY(-1px);
+                                box-shadow: 0 3px 10px rgba(107, 122, 252, 0.3);
+                            }
+                        }
+                    }
+
+
+                }
             }
 
         }
