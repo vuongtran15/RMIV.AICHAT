@@ -21,3 +21,27 @@ export function fnRemoveTokenFromLocalStorage() {
         console.error('Error removing token from localStorage:', error);
     }
 }
+
+
+export async function verifyAuth() {
+    try {
+        const options = {};
+        
+        // Add token from localStorage to Authorization header if it exists
+        const localToken = fnGetTokenFromLocalStorage();
+        if (localToken) {
+            options.headers = {
+                'Authorization': `Bearer ${localToken}`
+            };
+        }
+        
+        const response = await fetch('/api/auth/verify', options);
+        return await response.json();
+    } catch (error) {
+        console.error('Error verifying authentication:', error);
+        return {
+            authenticated: false,
+            message: 'Error verifying authentication'
+        };
+    }
+}
