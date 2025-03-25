@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import './page.scss';
 import Image from 'next/image';
 import { FiSearch, FiEdit, FiTrash2 } from 'react-icons/fi';
+import ChatIntrodution from '@/components/chat/Introduction';
+import ChatBoxContainer from '@/components/chat/ChatBoxContainer';
 
 const ChatPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [chatHistory, setChatHistory] = useState([
-        { id: 1, title: 'How to use React hooks', date: '2025-03-22', isActive: true },
+        { id: 1, title: 'How to use React hooks', date: '2025-03-22', isActive: false },
         { id: 2, title: 'Building responsive layouts', date: '2025-03-21', isActive: false },
         { id: 3, title: 'Next.js optimization techniques', date: '2025-03-20', isActive: false },
         { id: 4, title: 'JavaScript async/await patterns', date: '2025-03-19', isActive: false },
@@ -54,16 +56,16 @@ const ChatPage = () => {
     const deleteChat = (e, id) => {
         e.stopPropagation(); // Prevent triggering selectChat
         const updatedHistory = chatHistory.filter(chat => chat.id !== id);
-        
+
         // If we're deleting the active chat, make the first remaining chat active
         if (chatHistory.find(chat => chat.id === id)?.isActive && updatedHistory.length > 0) {
             updatedHistory[0].isActive = true;
         }
-        
+
         setChatHistory(updatedHistory);
     };
 
-    const filteredChats = chatHistory.filter(chat => 
+    const filteredChats = chatHistory.filter(chat =>
         chat.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -73,9 +75,9 @@ const ChatPage = () => {
                 <div className='header-box'>
                     <div className='search-and-new-row'>
                         <div className='search-box'>
-                            <input 
-                                type="text" 
-                                placeholder="Search chats..." 
+                            <input
+                                type="text"
+                                placeholder="Search chats..."
                                 value={searchQuery}
                                 onChange={handleSearch}
                             />
@@ -91,15 +93,15 @@ const ChatPage = () => {
                 <div className='chat-history'>
                     {filteredChats.length > 0 ? (
                         filteredChats.map(chat => (
-                            <div 
-                                key={chat.id} 
+                            <div
+                                key={chat.id}
                                 className={`chat-item ${chat.isActive ? 'active' : ''}`}
                                 onClick={() => selectChat(chat.id)}
                             >
                                 <div className="chat-info">
                                     <h4>{chat.title}</h4>
                                 </div>
-                                <button 
+                                <button
                                     className="delete-chat"
                                     onClick={(e) => deleteChat(e, chat.id)}
                                 >
@@ -113,13 +115,13 @@ const ChatPage = () => {
                 </div>
             </div>
             <div className='chat-content'>
-                {chatHistory.length > 0 ? (
-                    chatHistory.find(chat => chat.isActive)?.title || 'Select a chat to begin'
+
+                {chatHistory.length > 0 && chatHistory.find(chat => chat.isActive) ? (
+                    <ChatBoxContainer item={chatHistory.find(chat => chat.isActive)} />
                 ) : (
-                    <div className="empty-state">
-                        <p>No chats available. Create a new chat to get started.</p>
-                    </div>
+                    <ChatIntrodution />
                 )}
+
             </div>
         </div>
     );
