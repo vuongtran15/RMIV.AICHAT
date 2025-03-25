@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import { fnGetTokenFromLocalStorage } from './utils/local';
 
-export function middleware(request) {
+export function middleware (request) {
   console.log('Middleware triggered');
   const path = request.nextUrl.pathname;
-  
+
   // Get auth token from cookies
   let authToken = request.cookies.get('auth-token')?.value;
 
