@@ -74,6 +74,27 @@ const ChatInput = () => {
         setContent(truncatedText);
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            if (!e.shiftKey) {
+                setContent(e.currentTarget.innerHTML);
+                sendMessage(e.currentTarget.innerHTML);
+                e.preventDefault();
+                
+            }
+            // Do not prevent default for Shift+Enter, allowing new line
+        }
+    };
+
+    const sendMessage = (msg) => {
+        if (!msg.trim()) return;
+        // Process and send the message here
+        console.log('Sending message:', msg);
+        
+        // Clear the input after sending
+        setContent('');
+    };
+
     return (
         <div className='chat-input-container'>
             <div
@@ -84,6 +105,7 @@ const ChatInput = () => {
                 data-gramm_editor="false"
                 data-enable-grammarly="false"
                 onPaste={handlePaste}
+                onKeyDown={handleKeyDown}
                 suppressContentEditableWarning={true}
                 dangerouslySetInnerHTML={{ __html: content }}
                 placeholder="Type a message..."
