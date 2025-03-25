@@ -66,33 +66,49 @@ function ToolCardBodyItem({ image, title, description }) {
 
 const ChatInput = () => {
     const maxLength = 500;
+    const [charCount, setCharCount] = useState(0);
     const inputRef = React.useRef(null);
 
     const handlePaste = (e) => {
         e.preventDefault();
         const text = (e.clipboardData || window.clipboardData).getData('text');
-        const truncatedText = text.slice(0, maxLength);
-        
-        // Insert the text at cursor position
         const selection = window.getSelection();
+        
         if (selection.rangeCount) {
             const range = selection.getRangeAt(0);
-            range.deleteContents();
-            
-            const currentLength = inputRef.current.innerText.length;
+            const selectedText = range.toString();
+            const currentLength = inputRef.current.innerText.length - selectedText.length;
             const remainingSpace = maxLength - currentLength;
             
+            range.deleteContents();
+            
             if (remainingSpace > 0) {
-                const textToInsert = truncatedText.slice(0, remainingSpace);
+                const textToInsert = text.slice(0, remainingSpace);
                 range.insertNode(document.createTextNode(textToInsert));
+                
+                // Move cursor to end of pasted text
+                range.setStartAfter(range.endContainer);
+                range.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                // Update character count after paste, accounting for replaced text
+                setTimeout(() => {
+                    const newText = inputRef.current.innerText;
+                    setCharCount(newText.length);
+                }, 0);
             }
         }
     };
 
     const handleInput = (e) => {
-        const text = e.currentTarget.innerText;
+        // Get text and remove any hidden characters and extra spaces
+        const text = e.currentTarget.innerText.replace(/\u200B/g, '').replace(/\n$/, '');
+        setCharCount(text.length);
+        
         if (text.length > maxLength) {
             e.currentTarget.innerText = text.slice(0, maxLength);
+            setCharCount(maxLength);
             // Move cursor to end
             const range = document.createRange();
             const sel = window.getSelection();
@@ -113,6 +129,7 @@ const ChatInput = () => {
                     // Clear the input right after sending
                     if (inputRef.current) {
                         inputRef.current.innerText = '';
+                        setCharCount(0);
                     }
                 }
             }
@@ -121,8 +138,8 @@ const ChatInput = () => {
 
     const sendMessage = (msg) => {
         if (!msg.trim()) return;
-        // Process and send the message here
         console.log('Sending message:', msg);
+        setCharCount(0);
     };
 
     return (
@@ -141,18 +158,21 @@ const ChatInput = () => {
                 suppressContentEditableWarning={true}
                 placeholder="Type a message..."
                 onFocus={(e) => e.currentTarget.dataset.placeholder = ''}
-                onBlur={(e) => e.currentTarget.dataset.placeholder = 'Type a message...'}
+                onBlur={(e) => {
+                    e.currentTarget.dataset.placeholder = 'Type a message...';
+                    // Recheck count on blur to ensure accuracy
+                    const text = e.currentTarget.innerText.replace(/\u200B/g, '').replace(/\n$/, '');
+                    setCharCount(text.length);
+                }}
                 data-placeholder="Type a message..."
             />
 
             <div className='chat-input-action flex flex-row justify-between items-center mt-2 px-2'>
                 <div className='left-items'>
                     <span className={`text-xs ${
-                        inputRef.current && inputRef.current.innerText.length >= maxLength 
-                            ? 'text-red-500' 
-                            : 'text-gray-400'
+                        charCount >= maxLength ? 'text-red-500' : 'text-gray-400'
                     }`}>
-                        {inputRef.current ? `${inputRef.current.innerText.length}/${maxLength}` : `0/${maxLength}`}
+                        {charCount}/{maxLength}
                     </span>
                 </div>
                 <div className='right-items flex flex-row gap-3'>
