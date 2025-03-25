@@ -63,24 +63,23 @@ function ToolCardBodyItem({ image, title, description }) {
         </div>
     </div>);
 }
-const ChatInput = () => {
-    const [content, setContent] = useState('');
-    const maxLength = 500;
 
-    const handlePaste = (e) => {
-        e.preventDefault();
-        const text = (e.clipboardData || window.clipboardData).getData('text');
-        const truncatedText = text.slice(0, maxLength);
-        setContent(truncatedText);
-    };
+const ChatInput = () => {
+    const maxLength = 500;
+    const inputRef = React.useRef(null);
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             if (!e.shiftKey) {
-                setContent(e.currentTarget.innerHTML);
-                sendMessage(e.currentTarget.innerHTML);
                 e.preventDefault();
-                
+                const message = e.currentTarget.innerText.trim();
+                if (message) {
+                    sendMessage(message);
+                    // Clear the input right after sending
+                    if (inputRef.current) {
+                        inputRef.current.innerText = '';
+                    }
+                }
             }
             // Do not prevent default for Shift+Enter, allowing new line
         }
@@ -90,24 +89,20 @@ const ChatInput = () => {
         if (!msg.trim()) return;
         // Process and send the message here
         console.log('Sending message:', msg);
-        
-        // Clear the input after sending
-        setContent('');
     };
 
     return (
         <div className='chat-input-container'>
             <div
+                ref={inputRef}
                 contentEditable
                 className="chat-input"
                 spellCheck="false"
                 data-gramm="false"
                 data-gramm_editor="false"
                 data-enable-grammarly="false"
-                onPaste={handlePaste}
                 onKeyDown={handleKeyDown}
                 suppressContentEditableWarning={true}
-                dangerouslySetInnerHTML={{ __html: content }}
                 placeholder="Type a message..."
                 onFocus={(e) => e.currentTarget.dataset.placeholder = ''}
                 onBlur={(e) => e.currentTarget.dataset.placeholder = 'Type a message...'}
