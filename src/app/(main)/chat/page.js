@@ -1,9 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import './page.scss';
-import Image from 'next/image';
 import { FiSearch, FiEdit, FiTrash2 } from 'react-icons/fi';
-import ChatIntrodution from '@/components/chat/Introduction';
+import ChatIntrodution from '@/components/chat/ChatIntrodution';
 import ChatBoxContainer from '@/components/chat/ChatBoxContainer';
 
 const ChatPage = () => {
