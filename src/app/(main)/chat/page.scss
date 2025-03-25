@@ -368,6 +368,26 @@
                     
                 }
 
+                .chat-input {
+                    &[contenteditable=true]:empty:before {
+                        content: attr(data-placeholder);
+                        color: #94a3b8;
+                        cursor: text;
+                    }
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+
+                .chat-input-container {
+                    position: relative;
+                    
+                    &:has(.chat-input:focus) {
+                        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+                    }
+                }
+
                 .chat-input-container{
                     border: 1px solid #e0e0e6;
                     border-radius: 8px;

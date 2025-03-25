@@ -68,6 +68,41 @@ const ChatInput = () => {
     const maxLength = 500;
     const inputRef = React.useRef(null);
 
+    const handlePaste = (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        const truncatedText = text.slice(0, maxLength);
+        
+        // Insert the text at cursor position
+        const selection = window.getSelection();
+        if (selection.rangeCount) {
+            const range = selection.getRangeAt(0);
+            range.deleteContents();
+            
+            const currentLength = inputRef.current.innerText.length;
+            const remainingSpace = maxLength - currentLength;
+            
+            if (remainingSpace > 0) {
+                const textToInsert = truncatedText.slice(0, remainingSpace);
+                range.insertNode(document.createTextNode(textToInsert));
+            }
+        }
+    };
+
+    const handleInput = (e) => {
+        const text = e.currentTarget.innerText;
+        if (text.length > maxLength) {
+            e.currentTarget.innerText = text.slice(0, maxLength);
+            // Move cursor to end
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.setStart(e.currentTarget.childNodes[0], maxLength);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    };
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             if (!e.shiftKey) {
@@ -81,7 +116,6 @@ const ChatInput = () => {
                     }
                 }
             }
-            // Do not prevent default for Shift+Enter, allowing new line
         }
     };
 
@@ -92,15 +126,17 @@ const ChatInput = () => {
     };
 
     return (
-        <div className='chat-input-container'>
+        <div className='chat-input-container relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all p-3'>
             <div
                 ref={inputRef}
                 contentEditable
-                className="chat-input"
+                className="chat-input w-full min-h-[40px] max-h-32 overflow-y-auto px-2 focus:outline-none"
                 spellCheck="false"
                 data-gramm="false"
                 data-gramm_editor="false"
                 data-enable-grammarly="false"
+                onPaste={handlePaste}
+                onInput={handleInput}
                 onKeyDown={handleKeyDown}
                 suppressContentEditableWarning={true}
                 placeholder="Type a message..."
@@ -109,17 +145,23 @@ const ChatInput = () => {
                 data-placeholder="Type a message..."
             />
 
-            <div className='chat-input-action flex flex-row'>
+            <div className='chat-input-action flex flex-row justify-between items-center mt-2 px-2'>
                 <div className='left-items'>
-                    
+                    <span className={`text-xs ${
+                        inputRef.current && inputRef.current.innerText.length >= maxLength 
+                            ? 'text-red-500' 
+                            : 'text-gray-400'
+                    }`}>
+                        {inputRef.current ? `${inputRef.current.innerText.length}/${maxLength}` : `0/${maxLength}`}
+                    </span>
                 </div>
-                <div className='right-items fkex flex-row gap-2'>
-                    <div className='action-btn'>
-                        <IoAttachSharp size={15} />
-                    </div>
-                    <div className='action-btn'>
-                        <HiMiniMicrophone size={15} />
-                    </div>
+                <div className='right-items flex flex-row gap-3'>
+                    <button className='action-btn p-1.5 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700'>
+                        <IoAttachSharp size={18} />
+                    </button>
+                    <button className='action-btn p-1.5 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700'>
+                        <HiMiniMicrophone size={18} />
+                    </button>
                 </div>
             </div>
         </div>
