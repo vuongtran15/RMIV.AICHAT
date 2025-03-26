@@ -3,7 +3,7 @@ import { HiMiniMicrophone } from "react-icons/hi2";
 import { IoAttachSharp } from "react-icons/io5";
 import ChatInputControl from './ChatInputControl';
 
-export default function ChatIntrodution() {
+export default function ChatIntrodution({addNewChat}) {
     return (
         <div className='main-chat'>
             <div className="chat-header"></div>
@@ -45,7 +45,7 @@ export default function ChatIntrodution() {
                 </div>
             </div>
             <div className="chat-control chat-container container mx-auto px-4 mb-2">
-                <ChatInputControl allowTyping={true} />
+                <ChatInputControl allowTyping={true} onMessageSend={msg=>addNewChat(msg)}/>
             </div>
         </div>
     );

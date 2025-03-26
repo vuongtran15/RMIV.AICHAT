@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HiMiniMicrophone } from "react-icons/hi2";
 import { IoAttachSharp } from "react-icons/io5";
 
-export default function ChatInputControl ({allowTyping = true}) {
+export default function ChatInputControl ({allowTyping = true, onMessageSend}) {
     const maxLength = 500;
     const [charCount, setCharCount] = useState(0);
     const inputRef = React.useRef(null);
@@ -77,6 +77,10 @@ export default function ChatInputControl ({allowTyping = true}) {
     const sendMessage = (msg) => {
         if (!msg.trim()) return;
         console.log('Sending message:', msg);
+        // Call the onMessageSend prop if provided
+        if (onMessageSend) {
+            onMessageSend(msg);
+        }
         setCharCount(0);
     };
 
