@@ -1,6 +1,12 @@
 import ChatInputControl from "./ChatInputControl";
 
 export default function ChatBoxContainer({ item }) {
+
+    const fnOnUserMessage = (message) => {
+        console.log("onUserMessage", message);
+    }
+
+
     return (
         <div className='main-chat chat-box-page'>
             <div className="chat-header font-medium p-5 content-center flex flex-row">
@@ -12,7 +18,7 @@ export default function ChatBoxContainer({ item }) {
                 </div>
             </div>
             <div className="chat-control chat-container container mx-auto px-4 mb-2">
-                <ChatInputControl allowTyping={true} />
+                <ChatInputControl allowTyping={true} onMessageSend={msg => fnOnUserMessage(msg)} />
             </div>
         </div>
     );

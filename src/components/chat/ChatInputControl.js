@@ -76,8 +76,6 @@ export default function ChatInputControl ({allowTyping = true, onMessageSend}) {
 
     const sendMessage = (msg) => {
         if (!msg.trim()) return;
-        console.log('Sending message:', msg);
-        // Call the onMessageSend prop if provided
         if (onMessageSend) {
             onMessageSend(msg);
         }
