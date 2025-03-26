@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ChatInputControl from "./ChatInputControl";
+import MsgUserItem from "./MsgUserItem";
+import MsgSystemItem from "./MsgSystemItem";
 
 export default function ChatBoxContainer({ item }) {
 
@@ -47,21 +49,6 @@ export default function ChatBoxContainer({ item }) {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    // Format timestamp
-    const formatTime = (date) => {
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    };
-
-    // Convert new line characters to <br> elements
-    const formatMessageWithLineBreaks = (text) => {
-        return text.split('\n').map((line, i) => (
-            <span key={i}>
-                {line}
-                {i < text.split('\n').length - 1 && <br />}
-            </span>
-        ));
-    };
-
     return (
         <div className='main-chat chat-box-page'>
             <div className="chat-header font-medium p-5 content-center flex flex-row">
@@ -71,25 +58,8 @@ export default function ChatBoxContainer({ item }) {
                 <div className="chat-introduction chat-container container mx-auto px-4 pt-2">
                     <div className="chat-messages space-y-4">
                         {messages.map((message) => (
-                            <div
-                                key={message.id}
-                                className={`message-container flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                            >
-                                <div
-                                    className={`message max-w-[70%] p-3 rounded-lg ${message.sender === 'user'
-                                        ? 'bg-blue-500 text-white rounded-tr-none'
-                                        : 'bg-gray-200 text-gray-800 rounded-tl-none'
-                                        }`}
-                                >
-                                    <div className="message-text">{formatMessageWithLineBreaks(message.text)}</div>
-                                    <div
-                                        className={`message-time text-xs mt-1 ${message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
-                                            }`}
-                                    >
-                                        {formatTime(message.timestamp)}
-                                    </div>
-                                </div>
-                            </div>
+                            message.sender === 'user' ? <MsgUserItem message={message} key={message.id} /> : 
+                            <MsgSystemItem message={message} key={message.id} />
                         ))}
                         <div ref={messagesEndRef} />
                     </div>
