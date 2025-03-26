@@ -419,10 +419,19 @@
                     }
                 }
             }
-
         }
+    }
+}
 
-
-
+.chat-box-page{
+    .chat-header{
+        border-bottom: 1px solid #e0e0e6;
+        .text{
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding-left: 20px;
+        }
     }
 }

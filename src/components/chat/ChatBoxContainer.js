@@ -1,9 +1,19 @@
-export default function ChatBoxContainer({item}) {
+import ChatInputControl from "./ChatInputControl";
+
+export default function ChatBoxContainer({ item }) {
     return (
-        <div className='chat-box-container'>
-            <h1>{item.title}</h1>
-            <p>This is the chat box where you can chat with your friends.</p>
-            <p>To get started, select a chat from the left or create a new one.</p>
+        <div className='main-chat chat-box-page'>
+            <div className="chat-header font-medium p-5 content-center flex flex-row">
+                <div className="text text-xl content-center">{item.title}</div>
+            </div>
+            <div className="chat-body">
+                <div className="chat-introduction chat-container container mx-auto px-4 place-content-center">
+
+                </div>
+            </div>
+            <div className="chat-control chat-container container mx-auto px-4 mb-2">
+                <ChatInputControl allowTyping={true} />
+            </div>
         </div>
     );
 }
