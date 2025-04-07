@@ -350,6 +350,34 @@ export default function CoursesPage() {
   // Loading state
   const [isLoading, setIsLoading] = useState(true);
 
+  // State for department course counts
+  const [departmentCourseCounts, setDepartmentCourseCounts] = useState({});
+
+  // Calculate course counts for each department
+  useEffect(() => {
+    const counts = {};
+    
+    // Initialize counts for all departments
+    departments.forEach(dept => {
+      counts[dept.name] = 0;
+    });
+    
+    // Count courses for each department
+    allCourses.forEach(course => {
+      if (course.department === 'Tất cả') {
+        // Add to all departments
+        departments.forEach(dept => {
+          counts[dept.name]++;
+        });
+      } else {
+        // Add to specific department
+        counts[course.department]++;
+      }
+    });
+    
+    setDepartmentCourseCounts(counts);
+  }, [allCourses, departments]);
+
   // Simulate loading when filters change
   useEffect(() => {
     setIsLoading(true);
@@ -632,7 +660,7 @@ export default function CoursesPage() {
                         ? 'bg-white text-pink-600' 
                         : 'bg-gray-100 text-gray-800'
                     }`}>
-                      {dept.requiredCourses}
+                      {departmentCourseCounts[dept.name] || 0}
                     </span>
                   </div>
                 </li>
