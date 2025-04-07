@@ -37,7 +37,7 @@ export default function CoursesPage() {
     { 
       id: 1, 
       title: 'An toàn lao động cơ bản', 
-      department: 'Tất cả', 
+      department: 'Phòng Sản xuất', 
       duration: '2 giờ', 
       students: 120, 
       completionRate: 85,
@@ -47,7 +47,7 @@ export default function CoursesPage() {
     { 
       id: 2, 
       title: 'Quy định công ty', 
-      department: 'Tất cả', 
+      department: 'Phòng Hành chính', 
       duration: '1.5 giờ', 
       students: 150, 
       completionRate: 92,
@@ -127,7 +127,7 @@ export default function CoursesPage() {
     { 
       id: 10, 
       title: 'Quản lý thời gian hiệu quả', 
-      department: 'Tất cả', 
+      department: 'Phòng Nhân sự', 
       duration: '2 giờ', 
       students: 80, 
       completionRate: 75,
@@ -147,7 +147,7 @@ export default function CoursesPage() {
     { 
       id: 12, 
       title: 'Kỹ năng lãnh đạo', 
-      department: 'Tất cả', 
+      department: 'Phòng Nhân sự', 
       duration: '4 giờ', 
       students: 30, 
       completionRate: 70,
@@ -237,7 +237,7 @@ export default function CoursesPage() {
     { 
       id: 21, 
       title: 'Kỹ năng thuyết trình', 
-      department: 'Tất cả', 
+      department: 'Phòng Marketing', 
       duration: '2.5 giờ', 
       students: 60, 
       completionRate: 70,
@@ -247,7 +247,7 @@ export default function CoursesPage() {
     { 
       id: 22, 
       title: 'Quản lý tài chính cá nhân', 
-      department: 'Tất cả', 
+      department: 'Phòng Tài chính', 
       duration: '3 giờ', 
       students: 45, 
       completionRate: 65,
@@ -257,7 +257,7 @@ export default function CoursesPage() {
     { 
       id: 23, 
       title: 'Quản lý thời gian', 
-      department: 'Tất cả', 
+      department: 'Phòng Hành chính', 
       duration: '2 giờ', 
       students: 50, 
       completionRate: 75,
@@ -364,15 +364,8 @@ export default function CoursesPage() {
     
     // Count courses for each department
     allCourses.forEach(course => {
-      if (course.department === 'Tất cả') {
-        // Add to all departments
-        departments.forEach(dept => {
-          counts[dept.name]++;
-        });
-      } else {
-        // Add to specific department
-        counts[course.department]++;
-      }
+      // Count courses that belong to a specific department
+      counts[course.department]++;
     });
     
     setDepartmentCourseCounts(counts);
@@ -406,7 +399,7 @@ export default function CoursesPage() {
     // Filter by department
     if (selectedDepartment !== 'Tất cả') {
       filtered = filtered.filter(course => 
-        course.department === selectedDepartment || course.department === 'Tất cả'
+        course.department === selectedDepartment
       );
     }
     
@@ -674,7 +667,7 @@ export default function CoursesPage() {
           <h2 className="text-xl font-semibold mb-4">
             {selectedDepartment === 'Tất cả' 
               ? 'Tất cả khóa học' 
-              : `Khóa học cho ${selectedDepartment}`}
+              : `Khóa học của ${selectedDepartment}`}
           </h2>
           
           {filteredCourses.length === 0 ? (
