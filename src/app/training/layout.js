@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   HomeIcon, 
   BookOpenIcon, 
@@ -23,15 +23,20 @@ export default function TrainingLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   const menuItems = [
-    { name: 'Dashboard', href: '/training', icon: HomeIcon },
+    { name: 'Dashboard', href: '/training/home', icon: HomeIcon },
     { name: 'Khóa học', href: '/training/courses', icon: BookOpenIcon },
     { name: 'Học viên', href: '/training/students', icon: UserGroupIcon },
     { name: 'Lịch học', href: '/training/schedule', icon: CalendarIcon },
     { name: 'Báo cáo', href: '/training/reports', icon: ChartBarIcon },
     { name: 'Cài đặt', href: '/training/settings', icon: CogIcon },
   ];
+
+  const handleMenuClick = (href) => {
+    router.push(href);
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -68,10 +73,10 @@ export default function TrainingLayout({ children }) {
             {menuItems.map((item) => {
               const isActive = pathname === item.href;
               return (
-                <Link
+                <div
                   key={item.name}
-                  href={item.href}
-                  className={`flex items-center px-4 py-3 text-base font-medium rounded-md transition-all duration-300 ${
+                  onClick={() => handleMenuClick(item.href)}
+                  className={`flex items-center px-4 py-3 text-base font-medium rounded-md transition-all duration-300 cursor-pointer ${
                     isActive
                       ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md'
                       : 'text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 hover:shadow-sm group'
@@ -81,7 +86,7 @@ export default function TrainingLayout({ children }) {
                   <span className={`transition-all duration-300 ${isActive ? 'font-bold' : 'group-hover:font-semibold group-hover:tracking-wide'}`}>
                     {item.name}
                   </span>
-                </Link>
+                </div>
               );
             })}
           </nav>
