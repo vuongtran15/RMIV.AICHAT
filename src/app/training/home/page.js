@@ -221,44 +221,46 @@ export default function HomePage() {
 
   // Course card component
   const CourseCard = ({ course }) => (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative h-40 w-full">
-        <Image 
-          src={course.image} 
-          alt={course.title}
-          fill
-          className="object-cover"
-        />
-      </div>
-      <div className="p-4">
-        <h3 className="font-bold text-lg mb-1">{course.title}</h3>
-        <p className="text-sm text-gray-500 mb-3">{course.department}</p>
-        
-        <div className="flex flex-wrap gap-2 mb-3">
-          {course.tags.map((tag, index) => (
-            <span key={index} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800">
-              <TagIcon className="w-3 h-3 mr-1" />
-              {tag}
-            </span>
-          ))}
+    <Link href={`/training/courses/${course.id}`} className="block">
+      <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+        <div className="relative h-40 w-full">
+          <Image 
+            src={course.image} 
+            alt={course.title}
+            fill
+            className="object-cover"
+          />
         </div>
-        
-        <div className="flex flex-wrap gap-3 text-sm text-gray-600">
-          <div className="flex items-center">
-            <ClockIcon className="w-4 h-4 mr-1" />
-            {course.duration}
+        <div className="p-4">
+          <h3 className="font-bold text-lg mb-1">{course.title}</h3>
+          <p className="text-sm text-gray-500 mb-3">{course.department}</p>
+          
+          <div className="flex flex-wrap gap-2 mb-3">
+            {course.tags.map((tag, index) => (
+              <span key={index} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800">
+                <TagIcon className="w-3 h-3 mr-1" />
+                {tag}
+              </span>
+            ))}
           </div>
-          <div className="flex items-center">
-            <UserGroupIcon className="w-4 h-4 mr-1" />
-            {course.students}
-          </div>
-          <div className="flex items-center">
-            <ChartBarIcon className="w-4 h-4 mr-1" />
-            {course.completionRate}%
+          
+          <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+            <div className="flex items-center">
+              <ClockIcon className="w-4 h-4 mr-1" />
+              {course.duration}
+            </div>
+            <div className="flex items-center">
+              <UserGroupIcon className="w-4 h-4 mr-1" />
+              {course.students}
+            </div>
+            <div className="flex items-center">
+              <ChartBarIcon className="w-4 h-4 mr-1" />
+              {course.completionRate}%
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 
   return (
