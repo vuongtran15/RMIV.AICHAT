@@ -16,6 +16,9 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Constants
+const ALL_DEPARTMENTS = 'Tất cả';
+
 export default function HomePage() {
   // Mock data for demonstration
   const [userStats, setUserStats] = useState({
@@ -42,7 +45,7 @@ export default function HomePage() {
     { 
       id: 1, 
       title: 'An toàn lao động cơ bản', 
-      department: 'Tất cả', 
+      department: 'Phòng Sản xuất', 
       duration: '2 giờ', 
       students: 120, 
       completionRate: 85,
@@ -52,7 +55,7 @@ export default function HomePage() {
     { 
       id: 2, 
       title: 'Quy định công ty', 
-      department: 'Tất cả', 
+      department: 'Phòng Hành chính', 
       duration: '1.5 giờ', 
       students: 150, 
       completionRate: 92,
@@ -125,7 +128,7 @@ export default function HomePage() {
     { 
       id: 1, 
       title: 'An toàn lao động cơ bản', 
-      department: 'Tất cả', 
+      department: 'Phòng Sản xuất', 
       duration: '2 giờ', 
       students: 120, 
       completionRate: 85,
@@ -135,7 +138,7 @@ export default function HomePage() {
     { 
       id: 2, 
       title: 'Quy định công ty', 
-      department: 'Tất cả', 
+      department: 'Phòng Hành chính', 
       duration: '1.5 giờ', 
       students: 150, 
       completionRate: 92,
@@ -185,7 +188,7 @@ export default function HomePage() {
     { 
       id: 7, 
       title: 'Quản lý thời gian hiệu quả', 
-      department: 'Tất cả', 
+      department: 'Phòng Nhân sự', 
       duration: '2 giờ', 
       students: 80, 
       completionRate: 75,
@@ -204,16 +207,16 @@ export default function HomePage() {
     }
   ]);
 
-  const [selectedDepartment, setSelectedDepartment] = useState('Tất cả');
+  const [selectedDepartment, setSelectedDepartment] = useState(ALL_DEPARTMENTS);
   const [filteredRequiredCourses, setFilteredRequiredCourses] = useState(requiredCourses);
 
   // Filter required courses when department is selected
   useEffect(() => {
-    if (selectedDepartment === 'Tất cả') {
+    if (selectedDepartment === ALL_DEPARTMENTS) {
       setFilteredRequiredCourses(requiredCourses);
     } else {
       const filtered = requiredCourses.filter(course => 
-        course.department === selectedDepartment || course.department === 'Tất cả'
+        course.department === selectedDepartment
       );
       setFilteredRequiredCourses(filtered);
     }
@@ -251,11 +254,11 @@ export default function HomePage() {
             </div>
             <div className="flex items-center">
               <UserGroupIcon className="w-4 h-4 mr-1" />
-              {course.students}
+              {course.students} học viên
             </div>
             <div className="flex items-center">
               <ChartBarIcon className="w-4 h-4 mr-1" />
-              {course.completionRate}%
+              {course.completionRate}% hoàn thành
             </div>
           </div>
         </div>
@@ -264,8 +267,8 @@ export default function HomePage() {
   );
 
   return (
-    <div className="space-y-8">
-      {/* Phần 1: Panel lời chào và thống kê */}
+    <div className="container mx-auto px-4 py-8 space-y-8">
+      {/* Phần 1: Thống kê người dùng */}
       <section className="bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl shadow-lg p-6 text-white">
         <div className="flex flex-col md:flex-row gap-6">
           {/* User information - left side */}
@@ -334,18 +337,18 @@ export default function HomePage() {
           Bộ phận cần đào tạo
         </h2>
         
-        <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+        <div className="overflow-x-auto">
           <div className="flex space-x-3 min-w-max">
             <button 
-              onClick={() => setSelectedDepartment('Tất cả')}
+              onClick={() => setSelectedDepartment(ALL_DEPARTMENTS)}
               className={`p-4 rounded-lg border-2 transition-all whitespace-nowrap ${
-                selectedDepartment === 'Tất cả' 
+                selectedDepartment === ALL_DEPARTMENTS 
                   ? 'border-pink-500 bg-pink-50 text-pink-700' 
                   : 'border-gray-200 hover:border-pink-300 hover:bg-pink-50'
               }`}
             >
               <div className="flex justify-between items-center">
-                <span className="font-medium">Tất cả</span>
+                <span className="font-medium">{ALL_DEPARTMENTS}</span>
                 <span className="bg-pink-100 text-pink-700 px-2 py-1 rounded-full text-xs font-medium ml-2">
                   {requiredCourses.length} khóa
                 </span>
@@ -375,12 +378,12 @@ export default function HomePage() {
       </section>
 
       {/* Phần 3: Danh sách khóa học bắt buộc */}
-      <section className="bg-white rounded-xl p-6">
+      <section className="bg-white rounded-xl shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold flex items-center">
             <AcademicCapIcon className="w-6 h-6 mr-2 text-pink-500" />
             Khóa học bắt buộc
-            {selectedDepartment !== 'Tất cả' && (
+            {selectedDepartment !== ALL_DEPARTMENTS && (
               <span className="ml-2 text-sm font-normal text-gray-500">
                 (Đã lọc theo {selectedDepartment})
               </span>

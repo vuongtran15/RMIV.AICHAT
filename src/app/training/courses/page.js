@@ -14,6 +14,9 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Constants
+const ALL_DEPARTMENTS = 'Tất cả';
+
 export default function CoursesPage() {
   // State for search query
   const [searchQuery, setSearchQuery] = useState('');
@@ -340,7 +343,7 @@ export default function CoursesPage() {
   const [filteredCourses, setFilteredCourses] = useState(allCourses);
   
   // State for selected department
-  const [selectedDepartment, setSelectedDepartment] = useState('Tất cả');
+  const [selectedDepartment, setSelectedDepartment] = useState(ALL_DEPARTMENTS);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -397,7 +400,7 @@ export default function CoursesPage() {
     }
     
     // Filter by department
-    if (selectedDepartment !== 'Tất cả') {
+    if (selectedDepartment !== ALL_DEPARTMENTS) {
       filtered = filtered.filter(course => 
         course.department === selectedDepartment
       );
@@ -618,17 +621,17 @@ export default function CoursesPage() {
             <ul className="divide-y divide-gray-200">
               <li 
                 className={`px-4 py-3 cursor-pointer transition-all duration-300 ${
-                  selectedDepartment === 'Tất cả' 
+                  selectedDepartment === ALL_DEPARTMENTS 
                     ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md' 
                     : 'hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50'
                 }`}
-                onClick={() => setSelectedDepartment('Tất cả')}
+                onClick={() => setSelectedDepartment(ALL_DEPARTMENTS)}
               >
                 <div className="flex items-center">
                   <BuildingOfficeIcon className={`h-5 w-5 mr-3 ${
-                    selectedDepartment === 'Tất cả' ? 'text-white' : 'text-gray-400'
+                    selectedDepartment === ALL_DEPARTMENTS ? 'text-white' : 'text-gray-400'
                   }`} />
-                  <span className="font-medium">Tất cả</span>
+                  <span className="font-medium">{ALL_DEPARTMENTS}</span>
                 </div>
               </li>
               {departments.map((dept) => (
@@ -665,7 +668,7 @@ export default function CoursesPage() {
         {/* Courses grid with pagination */}
         <div className="lg:col-span-3">
           <h2 className="text-xl font-semibold mb-4">
-            {selectedDepartment === 'Tất cả' 
+            {selectedDepartment === ALL_DEPARTMENTS 
               ? 'Tất cả khóa học' 
               : `Khóa học của ${selectedDepartment}`}
           </h2>
