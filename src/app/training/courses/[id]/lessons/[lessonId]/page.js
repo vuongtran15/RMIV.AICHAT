@@ -48,7 +48,7 @@ export default function LessonPage() {
       id: 1, 
       type: 'video',
       title: 'Giới thiệu bài học',
-      content: 'https://www.youtube.com/embed/9bZkp7q19f0', // Changed to a working video
+      content: 'https://www.youtube.com/embed/9bZkp7q19f0?autoplay=1', // Added autoplay parameter
       duration: '2:30'
     },
     { 
@@ -85,7 +85,7 @@ export default function LessonPage() {
       id: 5, 
       type: 'video',
       title: 'Hướng dẫn thực hành',
-      content: 'https://www.youtube.com/embed/9bZkp7q19f0', // Changed to a working video
+      content: 'https://www.youtube.com/embed/9bZkp7q19f0?autoplay=1', // Added autoplay parameter
       duration: '3:45'
     }
   ]);
@@ -171,6 +171,11 @@ export default function LessonPage() {
         setCanProceed(true);
       }
     }, 5000);
+    
+    // Auto-play video when changing to a video slide
+    if (slides[currentSlideIndex].type === 'video') {
+      setIsPlaying(true);
+    }
     
     return () => {
       if (minimumViewTimeRef.current) {
