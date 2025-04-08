@@ -199,21 +199,7 @@ export default function CourseDetailPage() {
           
           <p className="text-gray-700 mb-6">{course.description}</p>
           
-          <div className="flex items-center">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
-              <Image 
-                src={instructorImageError ? getFallbackImage('instructor') : course.instructorImage} 
-                alt={course.instructor}
-                fill
-                className="object-cover"
-                onError={() => handleImageError('instructor')}
-              />
-            </div>
-            <div>
-              <p className="font-medium">{course.instructor}</p>
-              <p className="text-sm text-gray-500">{course.instructorTitle}</p>
-            </div>
-          </div>
+          
         </div>
       </div>
       
@@ -262,13 +248,20 @@ export default function CourseDetailPage() {
                         </div>
                       </div>
                     </div>
-                    <button className={`px-4 py-2 rounded-lg transition-colors ${
-                      module.completed 
-                        ? 'bg-green-100 text-green-700 hover:bg-green-200' 
-                        : 'bg-pink-100 text-pink-700 hover:bg-pink-200'
-                    }`}>
-                      {module.completed ? 'Xem lại' : 'Bắt đầu'}
-                    </button>
+                    <div className="flex items-center">
+                      {module.completed && (
+                        <div className="text-xs text-green-600 mr-3">
+                          Hoàn thành: {module.completedAt || '12/05/2023'}
+                        </div>
+                      )}
+                      <button className={`px-4 py-2 rounded-lg transition-colors ${
+                        module.completed 
+                          ? 'bg-green-100 text-green-700 hover:bg-green-200' 
+                          : 'bg-pink-100 text-pink-700 hover:bg-pink-200'
+                      }`}>
+                        {module.completed ? 'Xem lại' : 'Bắt đầu'}
+                      </button>
+                    </div>
                   </div>
                 </Link>
               ))}

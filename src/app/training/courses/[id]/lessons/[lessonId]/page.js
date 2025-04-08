@@ -356,9 +356,16 @@ export default function LessonPage() {
         </div>
         
         <h1 className="text-2xl font-bold mt-4">{lesson.title}</h1>
-        <div className="flex items-center mt-2 text-sm text-gray-500">
-          <ClockIcon className="w-4 h-4 mr-1" />
-          {lesson.duration}
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center text-sm text-gray-500">
+            <ClockIcon className="w-4 h-4 mr-1" />
+            {lesson.duration}
+          </div>
+          {lesson.completed && (
+            <div className="text-sm text-green-600">
+              Hoàn thành: {lesson.completedAt || '12/05/2023'}
+            </div>
+          )}
         </div>
       </div>
       
@@ -400,7 +407,14 @@ export default function LessonPage() {
         
         {/* Current slide */}
         <div className="mb-6">
-          <h2 className="text-xl font-bold mb-4">{slides[currentSlideIndex].title}</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">{slides[currentSlideIndex].title}</h2>
+            {slides[currentSlideIndex].completed && (
+              <div className="text-sm text-green-600">
+                Hoàn thành: {slides[currentSlideIndex].completedAt || '12/05/2023'}
+              </div>
+            )}
+          </div>
           {renderSlide(slides[currentSlideIndex])}
         </div>
         
