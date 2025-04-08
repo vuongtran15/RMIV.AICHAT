@@ -351,7 +351,7 @@ export default function CoursesPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   // Loading state
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   // State for department course counts
   const [departmentCourseCounts, setDepartmentCourseCounts] = useState({});
@@ -376,11 +376,11 @@ export default function CoursesPage() {
 
   // Simulate loading when filters change
   useEffect(() => {
-    setIsLoading(true);
+    setLoading(true);
     
     // Simulate API call delay
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      setLoading(false);
     }, 800);
     
     return () => clearTimeout(timer);
@@ -593,6 +593,14 @@ export default function CoursesPage() {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Danh sách khóa học</h1>
@@ -679,7 +687,7 @@ export default function CoursesPage() {
             </div>
           ) : (
             <>
-              {isLoading ? (
+              {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[...Array(6)].map((_, index) => (
                     <CourseCardSkeleton key={index} />

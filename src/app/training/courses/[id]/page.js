@@ -99,78 +99,40 @@ export default function CourseDetailPage() {
     ]
   });
   
-  // Fetch course data based on ID
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      // Mock data - in a real app, this would come from an API
-      const mockCourses = {
-        1: { 
-          id: 1, 
-          title: 'An toàn lao động cơ bản', 
-          department: 'Tất cả', 
-          duration: '2 giờ', 
-          students: 120, 
-          completionRate: 85,
-          tags: ['Bắt buộc', 'An toàn'],
-          image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-          description: 'Khóa học cung cấp kiến thức cơ bản về an toàn lao động, giúp người học nhận biết và phòng tránh các rủi ro trong môi trường làm việc.',
-          instructor: 'Nguyễn Văn B',
-          instructorTitle: 'Chuyên gia An toàn lao động',
-          lastUpdated: '15/03/2023',
-          level: 'Cơ bản',
-          language: 'Tiếng Việt',
-          progress: 'in_progress' // Mock progress state
-        },
-        2: { 
-          id: 2, 
-          title: 'Quy định công ty', 
-          department: 'Tất cả', 
-          duration: '1.5 giờ', 
-          students: 150, 
-          completionRate: 92,
-          tags: ['Bắt buộc', 'Quy định'],
-          image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-          description: 'Khóa học giới thiệu các quy định nội bộ của công ty, giúp nhân viên hiểu rõ về văn hóa tổ chức và các chính sách làm việc.',
-          instructor: 'Trần Thị C',
-          instructorTitle: 'Trưởng phòng Nhân sự',
-          lastUpdated: '10/04/2023',
-          level: 'Cơ bản',
-          language: 'Tiếng Việt'
-        },
-        3: { 
-          id: 3, 
-          title: 'Kỹ năng giao tiếp', 
-          department: 'Phòng Kinh doanh', 
-          duration: '3 giờ', 
-          students: 45, 
-          completionRate: 78,
-          tags: ['Bắt buộc', 'Kỹ năng mềm'],
-          image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80',
-          description: 'Khóa học trang bị các kỹ năng giao tiếp hiệu quả trong môi trường kinh doanh, giúp xây dựng mối quan hệ tốt với khách hàng và đồng nghiệp.',
-          instructor: 'Lê Văn D',
-          instructorTitle: 'Chuyên gia Đào tạo Kỹ năng mềm',
-          lastUpdated: '05/05/2023',
-          level: 'Trung cấp',
-          language: 'Tiếng Việt'
-        }
-      };
-      
-      setCourse(mockCourses[courseId] || null);
-      // Set course progress based on mock data
-      if (mockCourses[courseId]) {
-        setCourseProgress(mockCourses[courseId].progress || 'not_started');
-      }
-    }, 500);
-  }, [courseId]);
+  const [imageError, setImageError] = useState(false);
+  const [instructorImageError, setInstructorImageError] = useState(false);
+  const [relatedImageErrors, setRelatedImageErrors] = useState({});
+
+  const handleImageError = (type, id) => {
+    if (type === 'main') {
+      setImageError(true);
+    } else if (type === 'instructor') {
+      setInstructorImageError(true);
+    } else if (type === 'related') {
+      setRelatedImageErrors(prev => ({ ...prev, [id]: true }));
+    }
+  };
+
+  const getFallbackImage = (type) => {
+    switch (type) {
+      case 'main':
+        return '/images/course-placeholder.svg';
+      case 'instructor':
+        return '/images/instructor-placeholder.svg';
+      case 'related':
+        return '/images/related-course-placeholder.svg';
+      default:
+        return '/images/course-placeholder.svg';
+    }
+  };
   
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-64">
+  //       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+  //     </div>
+  //   );
+  // }
   
   if (!course) {
     return (
@@ -197,10 +159,11 @@ export default function CourseDetailPage() {
       <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
         <div className="relative h-64 w-full">
           <Image 
-            src={course.image} 
+            src={imageError ? getFallbackImage('main') : course.image} 
             alt={course.title}
             fill
             className="object-cover"
+            onError={() => handleImageError('main')}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
           <div className="absolute bottom-0 left-0 p-6 text-white">
@@ -239,10 +202,11 @@ export default function CourseDetailPage() {
           <div className="flex items-center">
             <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
               <Image 
-                src={course.instructorImage} 
+                src={instructorImageError ? getFallbackImage('instructor') : course.instructorImage} 
                 alt={course.instructor}
                 fill
                 className="object-cover"
+                onError={() => handleImageError('instructor')}
               />
             </div>
             <div>
@@ -266,22 +230,28 @@ export default function CourseDetailPage() {
             
             <div className="space-y-4">
               {course.modules.map(module => (
-                <div key={module.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
-                  <div className="flex items-center">
-                    {module.completed ? (
-                      <CheckCircleIcon className="w-6 h-6 text-green-500 mr-3" />
-                    ) : (
-                      <XCircleIcon className="w-6 h-6 text-gray-300 mr-3" />
-                    )}
-                    <div>
-                      <h3 className="font-medium">{module.title}</h3>
-                      <p className="text-sm text-gray-500">{module.duration}</p>
+                <Link 
+                  key={module.id} 
+                  href={`/training/courses/${courseId}/lessons/${module.id}`}
+                  className="block"
+                >
+                  <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                    <div className="flex items-center">
+                      {module.completed ? (
+                        <CheckCircleIcon className="w-6 h-6 text-green-500 mr-3" />
+                      ) : (
+                        <XCircleIcon className="w-6 h-6 text-gray-300 mr-3" />
+                      )}
+                      <div>
+                        <h3 className="font-medium">{module.title}</h3>
+                        <p className="text-sm text-gray-500">{module.duration}</p>
+                      </div>
                     </div>
+                    <button className="px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 transition-colors">
+                      {module.completed ? 'Xem lại' : 'Bắt đầu'}
+                    </button>
                   </div>
-                  <button className="px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 transition-colors">
-                    {module.completed ? 'Xem lại' : 'Bắt đầu'}
-                  </button>
-                </div>
+                </Link>
               ))}
             </div>
           </section>
@@ -326,10 +296,11 @@ export default function CourseDetailPage() {
                   <div className="flex items-center p-3 border rounded-lg hover:bg-gray-50">
                     <div className="relative w-16 h-16 rounded-lg overflow-hidden mr-4">
                       <Image 
-                        src={relatedCourse.image} 
+                        src={relatedImageErrors[relatedCourse.id] ? getFallbackImage('related') : relatedCourse.image} 
                         alt={relatedCourse.title}
                         fill
                         className="object-cover"
+                        onError={() => handleImageError('related', relatedCourse.id)}
                       />
                     </div>
                     <div>
