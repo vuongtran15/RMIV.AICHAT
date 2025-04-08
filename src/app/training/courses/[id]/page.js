@@ -202,73 +202,103 @@ export default function CourseDetailPage() {
           
         </div>
       </div>
-      
-      {/* Course content */}
+        {/* Course content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main content */}
         <div className="lg:col-span-2 space-y-8">
           {/* Modules */}
-          <section className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-bold mb-4 flex items-center">
+          <section className="bg-white rounded-xl shadow-md p-6 overflow-hidden">
+            <h2 className="text-xl font-bold mb-6 flex items-center">
               <BookOpenIcon className="w-6 h-6 mr-2 text-pink-500" />
               Nội dung khóa học
             </h2>
             
-            <div className="space-y-4">
-              {course.modules.map(module => (
-                <Link 
-                  key={module.id} 
-                  href={`/training/courses/${courseId}/lessons/${module.id}`}
-                  className="block"
-                >
-                  <div className={`flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-all ${
-                    module.completed ? 'bg-green-50' : 'bg-white'
-                  }`}>
-                    <div className="flex items-center">
-                      {module.completed ? (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 mr-3">
-                          <CheckCircleIcon className="w-6 h-6 text-green-500" />
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 mr-3">
-                          <XCircleIcon className="w-6 h-6 text-gray-400" />
-                        </div>
-                      )}
-                      <div>
-                        <h3 className="font-medium">{module.title}</h3>
-                        <div className="flex items-center mt-1">
-                          <p className="text-sm text-gray-500 mr-3">{module.duration}</p>
-                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                            module.completed 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-gray-100 text-gray-800'
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+              
+              <div className="space-y-6">
+                {course.modules.map((module, index) => (
+                  <div key={module.id} className="relative">
+                    <Link 
+                      href={`/training/courses/${courseId}/lessons/${module.id}`}
+                      className="block"
+                    >
+                      <div className={`relative flex flex-col sm:flex-row items-start sm:items-center rounded-xl border border-gray-100 transition-all duration-300 hover:shadow-md overflow-hidden ${
+                        module.completed ? 'bg-gradient-to-r from-green-50 to-white' : 'bg-gradient-to-r from-pink-50/30 to-white'
+                      }`}>
+                        {/* Module number indicator */}
+                        <div className="absolute left-4 -ml-4 flex items-center justify-center">
+                          <div className={`w-8 h-8 rounded-full border-4 border-white flex items-center justify-center z-10 ${
+                            module.completed ? 'bg-green-500' : 'bg-pink-500'
                           }`}>
-                            {module.completed ? 'Đã hoàn thành' : 'Chưa hoàn thành'}
-                          </span>
+                            <span className="text-xs font-bold text-white">{module.id}</span>
+                          </div>
+                        </div>
+                        
+                        {/* Main content */}
+                        <div className="w-full p-5 pl-10">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full">
+                            <div className="mb-3 sm:mb-0">
+                              <div className="flex items-center">
+                                <h3 className="font-semibold text-lg text-gray-800">{module.title}</h3>
+                                {module.completed && (
+                                  <span className="ml-2 inline-flex items-center">
+                                    <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex flex-wrap items-center mt-2 text-sm text-gray-600">
+                                <div className="flex items-center mr-4">
+                                  <ClockIcon className="w-4 h-4 mr-1 text-gray-500" />
+                                  <span>{module.duration}</span>
+                                </div>                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                  module.completed 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : 'bg-gray-100 text-gray-700'
+                                }`}>
+                                  {module.completed ? 'Đã hoàn thành' : 'Chưa hoàn thành'}
+                                </span>
+                                {module.completed && (
+                                  <span className="ml-3 text-xs text-green-600">
+                                    Hoàn thành: {module.completedAt || '12/05/2023 - 14:30'}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex-shrink-0">
+                              <button className={`flex items-center px-4 py-2 rounded-lg transition-all duration-300 ${
+                                module.completed 
+                                  ? 'bg-green-500 text-white hover:bg-green-600' 
+                                  : 'bg-pink-500 text-white hover:bg-pink-600'
+                              }`}>
+                                {module.completed ? (
+                                  <>
+                                    <BookOpenIcon className="w-4 h-4 mr-2" />
+                                    Xem lại
+                                  </>
+                                ) : (
+                                  <>
+                                    <PlayIcon className="w-4 h-4 mr-2" />
+                                    Bắt đầu
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center">
-                      {module.completed && (
-                        <div className="text-xs text-green-600 mr-3">
-                          Hoàn thành: {module.completedAt || '12/05/2023'}
-                        </div>
-                      )}
-                      <button className={`px-4 py-2 rounded-lg transition-colors ${
-                        module.completed 
-                          ? 'bg-green-100 text-green-700 hover:bg-green-200' 
-                          : 'bg-pink-100 text-pink-700 hover:bg-pink-200'
-                      }`}>
-                        {module.completed ? 'Xem lại' : 'Bắt đầu'}
-                      </button>
-                    </div>
+                    </Link>
+                      {/* Connector to next module (except for last item) */}
+                    {index < course.modules.length - 1 && (
+                      <div className="absolute left-4 top-full h-6 w-0.5 bg-gray-200"></div>
+                    )}
                   </div>
-                </Link>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
         </div>
-        
         {/* Sidebar */}
         <div className="space-y-8">
           {/* Progress */}
