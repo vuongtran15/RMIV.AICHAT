@@ -35,10 +35,10 @@ export default function CourseDetailPage() {
     students: 120,
     completionRate: 85,
     tags: ['Bắt buộc', 'An toàn'],
-    image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    image: '/images/training/safety-basics.jpg',
     instructor: 'Nguyễn Văn B',
     instructorTitle: 'Trưởng phòng An toàn',
-    instructorImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    instructorImage: '/images/training/instructor.jpg',
     modules: [
       {
         id: 1,
@@ -74,7 +74,7 @@ export default function CourseDetailPage() {
         students: 60,
         completionRate: 70,
         tags: ['Bắt buộc', 'Sản xuất'],
-        image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+        image: '/images/training/production-process.jpg'
       },
       {
         id: 6,
@@ -84,7 +84,7 @@ export default function CourseDetailPage() {
         students: 45,
         completionRate: 65,
         tags: ['Bắt buộc', 'Sản xuất'],
-        image: 'https://images.unsplash.com/photo-1581093458791-9f3c3250a8b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+        image: '/images/training/quality-management.jpg'
       },
       {
         id: 7,
@@ -94,7 +94,7 @@ export default function CourseDetailPage() {
         students: 30,
         completionRate: 55,
         tags: ['Bắt buộc', 'An toàn'],
-        image: 'https://images.unsplash.com/photo-1581093458791-9f3c3250a8b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+        image: '/images/training/chemical-safety.jpg'
       }
     ]
   });
@@ -235,19 +235,38 @@ export default function CourseDetailPage() {
                   href={`/training/courses/${courseId}/lessons/${module.id}`}
                   className="block"
                 >
-                  <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                  <div className={`flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-all ${
+                    module.completed ? 'bg-green-50' : 'bg-white'
+                  }`}>
                     <div className="flex items-center">
                       {module.completed ? (
-                        <CheckCircleIcon className="w-6 h-6 text-green-500 mr-3" />
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 mr-3">
+                          <CheckCircleIcon className="w-6 h-6 text-green-500" />
+                        </div>
                       ) : (
-                        <XCircleIcon className="w-6 h-6 text-gray-300 mr-3" />
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 mr-3">
+                          <XCircleIcon className="w-6 h-6 text-gray-400" />
+                        </div>
                       )}
                       <div>
                         <h3 className="font-medium">{module.title}</h3>
-                        <p className="text-sm text-gray-500">{module.duration}</p>
+                        <div className="flex items-center mt-1">
+                          <p className="text-sm text-gray-500 mr-3">{module.duration}</p>
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                            module.completed 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-gray-100 text-gray-800'
+                          }`}>
+                            {module.completed ? 'Đã hoàn thành' : 'Chưa hoàn thành'}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <button className="px-4 py-2 bg-pink-100 text-pink-700 rounded-lg hover:bg-pink-200 transition-colors">
+                    <button className={`px-4 py-2 rounded-lg transition-colors ${
+                      module.completed 
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200' 
+                        : 'bg-pink-100 text-pink-700 hover:bg-pink-200'
+                    }`}>
                       {module.completed ? 'Xem lại' : 'Bắt đầu'}
                     </button>
                   </div>

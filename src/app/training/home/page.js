@@ -50,7 +50,7 @@ export default function HomePage() {
       students: 120, 
       completionRate: 85,
       tags: ['Bắt buộc', 'An toàn'],
-      image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/safety-basics.jpg'
     },
     { 
       id: 2, 
@@ -60,7 +60,7 @@ export default function HomePage() {
       students: 150, 
       completionRate: 92,
       tags: ['Bắt buộc', 'Quy định'],
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/company-regulations.jpg'
     },
     { 
       id: 3, 
@@ -70,7 +70,7 @@ export default function HomePage() {
       students: 45, 
       completionRate: 78,
       tags: ['Bắt buộc', 'Kỹ năng mềm'],
-      image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80'
+      image: '/images/training/communication-skills.jpg'
     },
     { 
       id: 4, 
@@ -80,7 +80,7 @@ export default function HomePage() {
       students: 30, 
       completionRate: 65,
       tags: ['Bắt buộc', 'Bảo mật'],
-      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/data-security.jpg'
     },
     { 
       id: 5, 
@@ -90,7 +90,7 @@ export default function HomePage() {
       students: 60, 
       completionRate: 70,
       tags: ['Bắt buộc', 'Sản xuất'],
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/production-process.jpg'
     },
     { 
       id: 6, 
@@ -100,7 +100,7 @@ export default function HomePage() {
       students: 35, 
       completionRate: 62,
       tags: ['Bắt buộc', 'Tài chính'],
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2011&q=80'
+      image: '/images/training/basic-financial-management.jpg'
     },
     { 
       id: 7, 
@@ -110,7 +110,7 @@ export default function HomePage() {
       students: 25, 
       completionRate: 58,
       tags: ['Bắt buộc', 'Nhân sự'],
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/recruitment-process.jpg'
     },
     { 
       id: 8, 
@@ -120,7 +120,7 @@ export default function HomePage() {
       students: 40, 
       completionRate: 67,
       tags: ['Bắt buộc', 'Quản lý'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/project-management.jpg'
     }
   ]);
 
@@ -133,7 +133,7 @@ export default function HomePage() {
       students: 120, 
       completionRate: 85,
       tags: ['Bắt buộc', 'An toàn'],
-      image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/safety-basics.jpg'
     },
     { 
       id: 2, 
@@ -143,7 +143,7 @@ export default function HomePage() {
       students: 150, 
       completionRate: 92,
       tags: ['Bắt buộc', 'Quy định'],
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/company-regulations.jpg'
     },
     { 
       id: 3, 
@@ -153,7 +153,7 @@ export default function HomePage() {
       students: 45, 
       completionRate: 78,
       tags: ['Bắt buộc', 'Kỹ năng mềm'],
-      image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80'
+      image: '/images/training/communication-skills.jpg'
     },
     { 
       id: 4, 
@@ -163,7 +163,7 @@ export default function HomePage() {
       students: 30, 
       completionRate: 65,
       tags: ['Bắt buộc', 'Bảo mật'],
-      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/data-security.jpg'
     },
     { 
       id: 5, 
@@ -173,7 +173,7 @@ export default function HomePage() {
       students: 60, 
       completionRate: 70,
       tags: ['Bắt buộc', 'Sản xuất'],
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/production-process.jpg'
     },
     { 
       id: 6, 
@@ -183,7 +183,7 @@ export default function HomePage() {
       students: 25, 
       completionRate: 60,
       tags: ['Tùy chọn', 'Excel'],
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/advanced-excel.jpg'
     },
     { 
       id: 7, 
@@ -193,7 +193,7 @@ export default function HomePage() {
       students: 80, 
       completionRate: 75,
       tags: ['Tùy chọn', 'Kỹ năng mềm'],
-      image: 'https://images.unsplash.com/photo-1506784365847-bbad939e9335?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80'
+      image: '/images/training/time-management.jpg'
     },
     { 
       id: 8, 
@@ -203,7 +203,7 @@ export default function HomePage() {
       students: 20, 
       completionRate: 55,
       tags: ['Tùy chọn', 'Quản lý'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/project-management.jpg'
     }
   ]);
 
