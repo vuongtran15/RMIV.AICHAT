@@ -3,14 +3,22 @@ import { FaUserAlt } from 'react-icons/fa';
 import { MdTextFields } from 'react-icons/md';
 import { IoImageOutline } from 'react-icons/io5';
 import AvatarPopup from './AvatarPopup';
+import VoicePopup from './VoicePopup';
+import { BsMicFill } from 'react-icons/bs';
 
 const RightContent = ({ voiceItems }) => {
   const [activeTab, setActiveTab] = useState('avatar');
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = useState(false);
+  const [isVoicePopupOpen, setIsVoicePopupOpen] = useState(false);
 
   const handleAvatarClick = () => {
     setActiveTab('avatar');
     setIsAvatarPopupOpen(true);
+  };
+
+  const handleVoiceClick = () => {
+    setActiveTab('voice');
+    setIsVoicePopupOpen(true);
   };
 
   return (
@@ -25,6 +33,15 @@ const RightContent = ({ voiceItems }) => {
               : 'text-gray-500 hover:bg-gray-100'}`}
         >
           <FaUserAlt className="w-5 h-5" />
+        </div>
+        <div 
+          onClick={handleVoiceClick}
+          className={`p-3 rounded flex items-center justify-center w-12 h-12 transition-all
+            ${activeTab === 'voice' 
+              ? 'bg-red-100 text-red-500' 
+              : 'text-gray-500 hover:bg-gray-100'}`}
+        >
+          <BsMicFill className="w-5 h-5" />
         </div>
         <div 
           onClick={() => setActiveTab('text')}
@@ -79,6 +96,12 @@ const RightContent = ({ voiceItems }) => {
       <AvatarPopup 
         isOpen={isAvatarPopupOpen}
         onClose={() => setIsAvatarPopupOpen(false)}
+      />
+
+      {/* Voice Popup */}
+      <VoicePopup 
+        isOpen={isVoicePopupOpen}
+        onClose={() => setIsVoicePopupOpen(false)}
       />
     </div>
   );
