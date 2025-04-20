@@ -22,7 +22,7 @@ export default function HeygenPage() {
           voiceItems={voiceItems}
           setVoiceItems={setVoiceItems}
         />
-        <div className="w-3/5 p-4">
+        <div className="w-3/5 p-4 bg-gray-100">
           <RightContent voiceItems={voiceItems} />
         </div>
       </div>

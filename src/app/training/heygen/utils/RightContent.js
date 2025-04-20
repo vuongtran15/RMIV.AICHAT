@@ -14,47 +14,47 @@ const RightContent = ({ voiceItems }) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full ">
       {/* Toolbar Section */}
-      <div className="h-14 border-b border-gray-200 flex items-center justify-center space-x-2 px-4">
-        <button 
+      <div className="h-16 border-b border-gray-200 flex items-center justify-center space-x-2 px-4 bg-white rounded mb-4">
+        <div 
           onClick={handleAvatarClick}
-          className={`p-3 rounded-lg flex items-center justify-center w-12 h-12 transition-all
+          className={`p-3 rounded flex items-center justify-center w-12 h-12 transition-all
             ${activeTab === 'avatar' 
               ? 'bg-red-100 text-red-500' 
               : 'text-gray-500 hover:bg-gray-100'}`}
         >
           <FaUserAlt className="w-5 h-5" />
-        </button>
-        <button 
+        </div>
+        <div 
           onClick={() => setActiveTab('text')}
-          className={`p-3 rounded-lg flex items-center justify-center w-12 h-12 transition-all
+          className={`p-3 rounded flex items-center justify-center w-12 h-12 transition-all
             ${activeTab === 'text' 
               ? 'bg-red-100 text-red-500' 
               : 'text-gray-500 hover:bg-gray-100'}`}
         >
           <MdTextFields className="w-5 h-5" />
-        </button>
-        <button 
+        </div>
+        <div 
           onClick={() => setActiveTab('media')}
-          className={`p-3 rounded-lg flex items-center justify-center w-12 h-12 transition-all
+          className={`p-3 rounded flex items-center justify-center w-12 h-12 transition-all
             ${activeTab === 'media' 
               ? 'bg-red-100 text-red-500' 
               : 'text-gray-500 hover:bg-gray-100'}`}
         >
           <IoImageOutline className="w-5 h-5" />
-        </button>
+        </div>
       </div>
 
       {/* Main Container */}
       <div className="flex-1 bg-purple-500 relative">
         <div className="absolute bottom-4 right-4">
-          <img src="/heygen-avatar.png" alt="HeyGen Avatar" className="w-24 h-24" />
+          
         </div>
       </div>
 
       {/* Footer Section */}
-      <div className="h-32 border-t border-gray-200">
+      <div className="h-32 border-t border-gray-200 bg-white rounded mt-4">
         <div className="h-full p-4">
           <div className="flex gap-4 overflow-x-auto custom-scrollbar">
             {voiceItems.map((item, index) => (
@@ -67,7 +67,7 @@ const RightContent = ({ voiceItems }) => {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Scene {index + 1}</p>
-                  <p className="text-xs text-gray-500 truncate">{item.text}</p>
+                  <p className="text-xs text-gray-500 truncate max-w-[100px]">{item.text}</p>
                 </div>
               </div>
             ))}

@@ -3,6 +3,8 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { FiTrash2, FiPlusCircle } from 'react-icons/fi';
 
+const MAX_ITEMS = 20;
+
 export default function LeftContent({ voiceItems, setVoiceItems }) {
   const [openMenuId, setOpenMenuId] = useState(null);
   const [title, setTitle] = useState('Untitled Video');
@@ -36,6 +38,10 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
   };
 
   const handleAddItem = () => {
+    if (voiceItems.length >= MAX_ITEMS) {
+      alert(`Maximum limit of ${MAX_ITEMS} items reached`);
+      return;
+    }
     const newId = voiceItems.length > 0 ? Math.max(...voiceItems.map(item => item.id)) + 1 : 1;
     const newSequence = voiceItems.length + 1;
     const newItem = {
@@ -48,6 +54,10 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
   };
 
   const handleInsertItem = (currentId) => {
+    if (voiceItems.length >= MAX_ITEMS) {
+      alert(`Maximum limit of ${MAX_ITEMS} items reached`);
+      return;
+    }
     const currentIndex = voiceItems.findIndex(item => item.id === currentId);
     const newId = Math.max(...voiceItems.map(item => item.id)) + 1;
     const newItem = {
