@@ -1,31 +1,103 @@
-import React, { useEffect, useState } from 'react';
-import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5';
-
-const avatars = [
-  { id: 1, name: 'Anna', image: '/avatar1.png' },
-  { id: 2, name: 'John', image: '/avatar2.png' },
-  { id: 3, name: 'Sarah', image: '/avatar3.png' },
-  { id: 4, name: 'Mike', image: '/avatar4.png' },
-  { id: 5, name: 'Lisa', image: '/avatar5.png' },
-  { id: 6, name: 'David', image: '/avatar6.png' },
-  { id: 7, name: 'Emma', image: '/avatar7.png' },
-  { id: 8, name: 'James', image: '/avatar8.png' },
-  { id: 9, name: 'Sophie', image: '/avatar9.png' },
-  { id: 10, name: 'William', image: '/avatar10.png' },
-  { id: 11, name: 'Olivia', image: '/avatar11.png' },
-  { id: 12, name: 'Daniel', image: '/avatar12.png' },
-  { id: 13, name: 'Isabella', image: '/avatar13.png' },
-  { id: 14, name: 'Michael', image: '/avatar14.png' },
-  { id: 15, name: 'Mia', image: '/avatar15.png' },
-  { id: 16, name: 'Alexander', image: '/avatar16.png' },
-  { id: 17, name: 'Charlotte', image: '/avatar17.png' },
-  { id: 18, name: 'Benjamin', image: '/avatar18.png' },
-  { id: 19, name: 'Amelia', image: '/avatar19.png' },
-  { id: 20, name: 'Henry', image: '/avatar20.png' },
-];
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { IoCloseOutline, IoSearchOutline, IoPlayOutline, IoPauseOutline } from 'react-icons/io5';
 
 const AvatarPopup = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [avatars, setAvatars] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [playingAudioId, setPlayingAudioId] = useState(null);
+  const [displayedAvatars, setDisplayedAvatars] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const audioRef = useRef(null);
+  const containerRef = useRef(null);
+  const ITEMS_PER_PAGE = 12;
+
+  useEffect(() => {
+    const fetchAvatars = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await fetch('/api/heygen?endpoint=AVATARS', {
+          method: 'GET'
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch avatars');
+        }
+        const data = await response.json();
+        //{ "avatar_id": "Abigail_expressive_2024112501", "avatar_name": "Abigail (Upper Body)", "gender": "female", "preview_image_url": "https://files2.heygen.ai/avatar/v3/1ad51ab9fee24ae88af067206e14a1d8_44250/preview_target.webp", "preview_video_url": "https://files2.heygen.ai/avatar/v3/1ad51ab9fee24ae88af067206e14a1d8_44250/preview_video_target.mp4", "premium": false, "type": null, "tags": null, "default_voice_id": null }
+        console.log(data.data.avatars);
+        var avatars = data.data.avatars
+          .filter(avatar => avatar.premium === false)
+          .map(avatar => ({
+            id: avatar.avatar_id,
+            name: avatar.avatar_name,
+            thumbnail_url: avatar.preview_image_url,
+            gender: avatar.gender,
+            premium: avatar.premium,
+            preview_video_url: avatar.preview_video_url,
+          }));
+        setAvatars(avatars);
+        setHasMore(avatars.length > ITEMS_PER_PAGE);
+      } catch (err) {
+        console.error('Error fetching avatars:', err);
+        setError('Failed to load avatars. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isOpen) {
+      fetchAvatars();
+    }
+  }, [isOpen]);
+
+  // Initialize displayed avatars when avatars or search query changes
+  useEffect(() => {
+    const filtered = avatars.filter(avatar => 
+      avatar.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setDisplayedAvatars(filtered.slice(0, ITEMS_PER_PAGE));
+    setPage(1);
+    setHasMore(filtered.length > ITEMS_PER_PAGE);
+  }, [avatars, searchQuery]);
+
+  // Handle scroll to load more
+  const handleScroll = useCallback(() => {
+    if (!containerRef.current || isLoadingMore || !hasMore) return;
+    
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    // Load more when user scrolls to 80% of the container
+    if (scrollTop + clientHeight >= scrollHeight * 0.8) {
+      loadMoreAvatars();
+    }
+  }, [isLoadingMore, hasMore]);
+
+  const loadMoreAvatars = () => {
+    if (isLoadingMore || !hasMore) return;
+    
+    setIsLoadingMore(true);
+    
+    // Simulate loading delay to prevent UI jank
+    setTimeout(() => {
+      const filtered = avatars.filter(avatar => 
+        avatar.name?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
+      const nextPage = page + 1;
+      const startIndex = (nextPage - 1) * ITEMS_PER_PAGE;
+      const endIndex = startIndex + ITEMS_PER_PAGE;
+      
+      const newAvatars = filtered.slice(startIndex, endIndex);
+      
+      setDisplayedAvatars(prev => [...prev, ...newAvatars]);
+      setPage(nextPage);
+      setHasMore(endIndex < filtered.length);
+      setIsLoadingMore(false);
+    }, 300);
+  };
 
   useEffect(() => {
     const handleEscKey = (event) => {
@@ -43,9 +115,43 @@ const AvatarPopup = ({ isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
-  const filteredAvatars = avatars.filter(avatar => 
-    avatar.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handlePlayAudio = (avatarId, previewUrl) => {
+    if (playingAudioId === avatarId) {
+      // If already playing this audio, stop it
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      setPlayingAudioId(null);
+    } else {
+      // Stop any currently playing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      
+      // Play the new audio
+      const audio = new Audio(previewUrl);
+      audioRef.current = audio;
+      audio.play();
+      setPlayingAudioId(avatarId);
+      
+      // Reset when audio finishes
+      audio.onended = () => {
+        setPlayingAudioId(null);
+        audioRef.current = null;
+      };
+    }
+  };
+
+  useEffect(() => {
+    // Clean up audio when component unmounts or popup closes
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -78,22 +184,94 @@ const AvatarPopup = ({ isOpen, onClose }) => {
         </div>
 
         {/* Avatar Grid */}
-        <div className="p-4 overflow-y-auto flex-1 max-h-[60vh]">
-          <div className="grid grid-cols-3 gap-4">
-            {filteredAvatars.map((avatar) => (
-              <div
-                key={avatar.id}
-                className="aspect-square border rounded-lg p-2 hover:border-purple-500 cursor-pointer transition-all hover:shadow-md"
-              >
-                <div className="w-full h-full bg-gray-50 rounded-lg flex items-center justify-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center text-gray-600 font-medium text-xl">
-                    {avatar.name[0]}
+        <div 
+          ref={containerRef}
+          className="p-4 overflow-y-auto flex-1 max-h-[60vh]"
+          onScroll={handleScroll}
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center h-40">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+            </div>
+          ) : error ? (
+            <div className="flex items-center justify-center h-40 text-red-500">
+              {error}
+            </div>
+          ) : displayedAvatars.length === 0 ? (
+            <div className="flex items-center justify-center h-40 text-gray-500">
+              No avatars found
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-3 gap-4">
+                {displayedAvatars.map((avatar) => (
+                  <div
+                    key={avatar.id}
+                    className="border rounded-lg overflow-hidden hover:border-purple-500 cursor-pointer transition-all hover:shadow-md relative flex flex-col h-[200px]"
+                  >
+                    {/* Image container - optimized for avatar display */}
+                    <div className="w-full h-[140px] bg-gray-100 relative overflow-hidden flex items-center justify-center">
+                      {avatar.thumbnail_url ? (
+                        <img 
+                          src={avatar.thumbnail_url} 
+                          alt={avatar.name}
+                          className="max-h-full max-w-full object-contain"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center text-gray-600 font-medium text-xl">
+                          {avatar.name?.[0] || '?'}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Info container */}
+                    <div className="p-2 bg-white flex-1 flex flex-col justify-between">
+                      <p className="text-sm font-medium text-gray-700 truncate">{avatar.name || 'Unnamed Avatar'}</p>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                          {avatar.gender || 'Unknown'}
+                        </span>
+                        {avatar.preview_video_url && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePlayAudio(avatar.id, avatar.preview_video_url);
+                            }}
+                            className="p-1 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
+                            title={playingAudioId === avatar.id ? "Stop preview" : "Play preview"}
+                          >
+                            {playingAudioId === avatar.id ? (
+                              <IoPauseOutline className="w-3 h-3" />
+                            ) : (
+                              <IoPlayOutline className="w-3 h-3" />
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <p className="text-center mt-2 text-sm font-medium text-gray-700">{avatar.name}</p>
+                ))}
               </div>
-            ))}
-          </div>
+              
+              {isLoadingMore && (
+                <div className="flex justify-center mt-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-red-500"></div>
+                </div>
+              )}
+              
+              {!isLoadingMore && hasMore && (
+                <div className="flex justify-center mt-4">
+                  <button 
+                    onClick={loadMoreAvatars}
+                    className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                  >
+                    Load More
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -9,6 +9,13 @@ const ENDPOINTS = {
   VOICES: 'voices', // Lấy danh sách voices
 };
 
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
+const cache = {
+  data: {},
+  timestamp: {}
+};
+const CACHE_ENDPOINTS = ['AVATARS', 'VOICES'];
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -16,6 +23,15 @@ export async function GET(request) {
 
     if (!endpoint || !ENDPOINTS[endpoint]) {
       return NextResponse.json({ error: 'Invalid endpoint' }, { status: 400 });
+    }
+
+    // Check if endpoint should be cached
+    if (CACHE_ENDPOINTS.includes(endpoint)) {
+      const now = Date.now();
+      // Return cached data if it exists and is not expired
+      if (cache.data[endpoint] && cache.timestamp[endpoint] && (now - cache.timestamp[endpoint] < CACHE_DURATION)) {
+        return NextResponse.json(cache.data[endpoint]);
+      }
     }
 
     const response = await fetch(`${HEYGEN_API_URL}/${ENDPOINTS[endpoint]}`, {
@@ -31,6 +47,13 @@ export async function GET(request) {
     }
 
     const data = await response.json();
+
+    // Cache the response if endpoint is in CACHE_ENDPOINTS
+    if (CACHE_ENDPOINTS.includes(endpoint)) {
+      cache.data[endpoint] = data;
+      cache.timestamp[endpoint] = Date.now();
+    }
+
     return NextResponse.json(data);
   } catch (error) {
     console.error('HeyGen API error:', error);
