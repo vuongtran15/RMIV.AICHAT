@@ -21,7 +21,7 @@ const RightContent = ({ voiceItems }) => {
           onClick={handleAvatarClick}
           className={`p-3 rounded-lg flex items-center justify-center w-12 h-12 transition-all
             ${activeTab === 'avatar' 
-              ? 'bg-purple-100 text-purple-600' 
+              ? 'bg-red-100 text-red-500' 
               : 'text-gray-500 hover:bg-gray-100'}`}
         >
           <FaUserAlt className="w-5 h-5" />
@@ -30,7 +30,7 @@ const RightContent = ({ voiceItems }) => {
           onClick={() => setActiveTab('text')}
           className={`p-3 rounded-lg flex items-center justify-center w-12 h-12 transition-all
             ${activeTab === 'text' 
-              ? 'bg-purple-100 text-purple-600' 
+              ? 'bg-red-100 text-red-500' 
               : 'text-gray-500 hover:bg-gray-100'}`}
         >
           <MdTextFields className="w-5 h-5" />
@@ -39,7 +39,7 @@ const RightContent = ({ voiceItems }) => {
           onClick={() => setActiveTab('media')}
           className={`p-3 rounded-lg flex items-center justify-center w-12 h-12 transition-all
             ${activeTab === 'media' 
-              ? 'bg-purple-100 text-purple-600' 
+              ? 'bg-red-100 text-red-500' 
               : 'text-gray-500 hover:bg-gray-100'}`}
         >
           <IoImageOutline className="w-5 h-5" />
