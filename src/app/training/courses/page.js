@@ -37,45 +37,45 @@ export default function CoursesPage() {
 
   // State for all courses (30 random courses)
   const [allCourses, setAllCourses] = useState([
-    { 
-      id: 1, 
-      title: 'An toàn lao động cơ bản', 
-      department: 'Phòng Sản xuất', 
-      duration: '2 giờ', 
-      students: 120, 
+    {
+      id: 1,
+      title: 'An toàn lao động cơ bản',
+      department: 'Phòng Sản xuất',
+      duration: '2 giờ',
+      students: 120,
       completionRate: 85,
       tags: ['Bắt buộc', 'An toàn'],
-      image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/safety-basics.jpg'
     },
-    { 
-      id: 2, 
-      title: 'Quy định công ty', 
-      department: 'Phòng Hành chính', 
-      duration: '1.5 giờ', 
-      students: 150, 
-      completionRate: 92,
+    {
+      id: 2,
+      title: 'Quy định công ty',
+      department: 'Tất cả',
+      duration: '1 giờ',
+      students: 250,
+      completionRate: 90,
       tags: ['Bắt buộc', 'Quy định'],
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/company-regulations.jpg'
     },
-    { 
-      id: 3, 
-      title: 'Kỹ năng giao tiếp', 
-      department: 'Phòng Kinh doanh', 
-      duration: '3 giờ', 
-      students: 45, 
-      completionRate: 78,
-      tags: ['Bắt buộc', 'Kỹ năng mềm'],
-      image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80'
+    {
+      id: 3,
+      title: 'Kỹ năng giao tiếp',
+      department: 'Tất cả',
+      duration: '3 giờ',
+      students: 80,
+      completionRate: 75,
+      tags: ['Tùy chọn', 'Kỹ năng mềm'],
+      image: '/images/training/communication-skills.jpg'
     },
-    { 
-      id: 4, 
-      title: 'Bảo mật thông tin', 
-      department: 'Phòng IT', 
-      duration: '2.5 giờ', 
-      students: 30, 
-      completionRate: 65,
-      tags: ['Bắt buộc', 'Bảo mật'],
-      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    {
+      id: 4,
+      title: 'Quản lý tài chính',
+      department: 'Phòng Tài chính',
+      duration: '4 giờ',
+      students: 45,
+      completionRate: 60,
+      tags: ['Bắt buộc', 'Tài chính'],
+      image: '/images/training/financial-management.jpg'
     },
     { 
       id: 5, 
@@ -85,7 +85,7 @@ export default function CoursesPage() {
       students: 60, 
       completionRate: 70,
       tags: ['Bắt buộc', 'Sản xuất'],
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/production-process.jpg'
     },
     { 
       id: 6, 
@@ -95,7 +95,7 @@ export default function CoursesPage() {
       students: 35, 
       completionRate: 62,
       tags: ['Bắt buộc', 'Tài chính'],
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2011&q=80'
+      image: '/images/training/financial-management.jpg'
     },
     { 
       id: 7, 
@@ -105,7 +105,7 @@ export default function CoursesPage() {
       students: 25, 
       completionRate: 58,
       tags: ['Bắt buộc', 'Nhân sự'],
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/recruitment-process.jpg'
     },
     { 
       id: 8, 
@@ -115,7 +115,7 @@ export default function CoursesPage() {
       students: 40, 
       completionRate: 67,
       tags: ['Bắt buộc', 'Quản lý'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/project-management.jpg'
     },
     { 
       id: 9, 
@@ -125,7 +125,7 @@ export default function CoursesPage() {
       students: 25, 
       completionRate: 60,
       tags: ['Tùy chọn', 'Excel'],
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/advanced-excel.jpg'
     },
     { 
       id: 10, 
@@ -135,7 +135,7 @@ export default function CoursesPage() {
       students: 80, 
       completionRate: 75,
       tags: ['Tùy chọn', 'Kỹ năng mềm'],
-      image: 'https://images.unsplash.com/photo-1506784365847-bbad939e9335?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80'
+      image: '/images/training/time-management.jpg'
     },
     { 
       id: 11, 
@@ -145,7 +145,7 @@ export default function CoursesPage() {
       students: 20, 
       completionRate: 55,
       tags: ['Tùy chọn', 'Quản lý'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/project-management.jpg'
     },
     { 
       id: 12, 
@@ -155,7 +155,7 @@ export default function CoursesPage() {
       students: 30, 
       completionRate: 70,
       tags: ['Tùy chọn', 'Kỹ năng mềm'],
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/leadership-skills.jpg'
     },
     { 
       id: 13, 
@@ -165,7 +165,7 @@ export default function CoursesPage() {
       students: 25, 
       completionRate: 65,
       tags: ['Bắt buộc', 'Nhân sự'],
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/hr-management.jpg'
     },
     { 
       id: 14, 
@@ -175,7 +175,7 @@ export default function CoursesPage() {
       students: 15, 
       completionRate: 50,
       tags: ['Bắt buộc', 'Tài chính'],
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2011&q=80'
+      image: '/images/training/advanced-financial-management.jpg'
     },
     { 
       id: 15, 
@@ -185,7 +185,7 @@ export default function CoursesPage() {
       students: 40, 
       completionRate: 60,
       tags: ['Bắt buộc', 'Sản xuất'],
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/production-management.jpg'
     },
     { 
       id: 16, 
@@ -195,7 +195,7 @@ export default function CoursesPage() {
       students: 20, 
       completionRate: 45,
       tags: ['Tùy chọn', 'Quản lý'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/advanced-project-management.jpg'
     },
     { 
       id: 17, 
@@ -205,7 +205,7 @@ export default function CoursesPage() {
       students: 30, 
       completionRate: 55,
       tags: ['Bắt buộc', 'Marketing'],
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/marketing-management.jpg'
     },
     { 
       id: 18, 
@@ -215,7 +215,7 @@ export default function CoursesPage() {
       students: 25, 
       completionRate: 65,
       tags: ['Bắt buộc', 'Hành chính'],
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/administrative-management.jpg'
     },
     { 
       id: 19, 
@@ -225,7 +225,7 @@ export default function CoursesPage() {
       students: 20, 
       completionRate: 50,
       tags: ['Bắt buộc', 'Pháp chế'],
-      image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/legal-management.jpg'
     },
     { 
       id: 20, 
@@ -235,7 +235,7 @@ export default function CoursesPage() {
       students: 15, 
       completionRate: 45,
       tags: ['Bắt buộc', 'R&D'],
-      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/rd-management.jpg'
     },
     { 
       id: 21, 
@@ -245,7 +245,7 @@ export default function CoursesPage() {
       students: 60, 
       completionRate: 70,
       tags: ['Tùy chọn', 'Kỹ năng mềm'],
-      image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80'
+      image: '/images/training/presentation-skills.jpg'
     },
     { 
       id: 22, 
@@ -255,7 +255,7 @@ export default function CoursesPage() {
       students: 45, 
       completionRate: 65,
       tags: ['Tùy chọn', 'Tài chính'],
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2011&q=80'
+      image: '/images/training/personal-finance.jpg'
     },
     { 
       id: 23, 
@@ -265,7 +265,7 @@ export default function CoursesPage() {
       students: 50, 
       completionRate: 75,
       tags: ['Tùy chọn', 'Kỹ năng mềm'],
-      image: 'https://images.unsplash.com/photo-1506784365847-bbad939e9335?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2068&q=80'
+      image: '/images/training/time-management.jpg'
     },
     { 
       id: 24, 
@@ -275,7 +275,7 @@ export default function CoursesPage() {
       students: 25, 
       completionRate: 55,
       tags: ['Tùy chọn', 'Quản lý'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/agile-management.jpg'
     },
     { 
       id: 25, 
@@ -285,7 +285,7 @@ export default function CoursesPage() {
       students: 20, 
       completionRate: 50,
       tags: ['Tùy chọn', 'Nhân sự'],
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/advanced-hr-management.jpg'
     },
     { 
       id: 26, 
@@ -295,7 +295,7 @@ export default function CoursesPage() {
       students: 15, 
       completionRate: 45,
       tags: ['Tùy chọn', 'Tài chính'],
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2011&q=80'
+      image: '/images/training/corporate-finance.jpg'
     },
     { 
       id: 27, 
@@ -305,7 +305,7 @@ export default function CoursesPage() {
       students: 20, 
       completionRate: 40,
       tags: ['Tùy chọn', 'Sản xuất'],
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/advanced-production-management.jpg'
     },
     { 
       id: 28, 
@@ -315,7 +315,7 @@ export default function CoursesPage() {
       students: 15, 
       completionRate: 45,
       tags: ['Tùy chọn', 'Marketing'],
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/advanced-marketing-management.jpg'
     },
     { 
       id: 29, 
@@ -325,7 +325,7 @@ export default function CoursesPage() {
       students: 15, 
       completionRate: 50,
       tags: ['Tùy chọn', 'Hành chính'],
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/advanced-administrative-management.jpg'
     },
     { 
       id: 30, 
@@ -335,7 +335,7 @@ export default function CoursesPage() {
       students: 10, 
       completionRate: 40,
       tags: ['Tùy chọn', 'Pháp chế'],
-      image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+      image: '/images/training/advanced-legal-management.jpg'
     }
   ]);
 
@@ -351,7 +351,7 @@ export default function CoursesPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   // Loading state
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   // State for department course counts
   const [departmentCourseCounts, setDepartmentCourseCounts] = useState({});
@@ -376,11 +376,11 @@ export default function CoursesPage() {
 
   // Simulate loading when filters change
   useEffect(() => {
-    setIsLoading(true);
+    setLoading(true);
     
     // Simulate API call delay
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      setLoading(false);
     }, 800);
     
     return () => clearTimeout(timer);
@@ -593,6 +593,14 @@ export default function CoursesPage() {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Danh sách khóa học</h1>
@@ -679,7 +687,7 @@ export default function CoursesPage() {
             </div>
           ) : (
             <>
-              {isLoading ? (
+              {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[...Array(6)].map((_, index) => (
                     <CourseCardSkeleton key={index} />
