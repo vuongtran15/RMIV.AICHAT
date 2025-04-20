@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import LeftContent from './utils/LeftContent';
+import RightContent from './utils/RightContent';
 
 export default function HeygenPage() {
   const [voiceItems, setVoiceItems] = useState([
@@ -22,7 +23,7 @@ export default function HeygenPage() {
           setVoiceItems={setVoiceItems}
         />
         <div className="w-3/5 p-4">
-          {/* Right half content */}
+          <RightContent voiceItems={voiceItems} />
         </div>
       </div>
     </div>
