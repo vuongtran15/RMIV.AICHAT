@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { IoCloseOutline, IoSearchOutline, IoPlayOutline, IoPauseOutline } from 'react-icons/io5';
+import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5';
 
 const AvatarPopup = ({ isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [playingAudioId, setPlayingAudioId] = useState(null);
   const [displayedAvatars, setDisplayedAvatars] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const audioRef = useRef(null);
   const containerRef = useRef(null);
   const ITEMS_PER_PAGE = 12;
 
@@ -37,7 +35,6 @@ const AvatarPopup = ({ isOpen, onClose }) => {
             thumbnail_url: avatar.preview_image_url,
             gender: avatar.gender,
             premium: avatar.premium,
-            preview_video_url: avatar.preview_video_url,
           }));
         setAvatars(avatars);
         setHasMore(avatars.length > ITEMS_PER_PAGE);
@@ -115,44 +112,6 @@ const AvatarPopup = ({ isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
-  const handlePlayAudio = (avatarId, previewUrl) => {
-    if (playingAudioId === avatarId) {
-      // If already playing this audio, stop it
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      setPlayingAudioId(null);
-    } else {
-      // Stop any currently playing audio
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      
-      // Play the new audio
-      const audio = new Audio(previewUrl);
-      audioRef.current = audio;
-      audio.play();
-      setPlayingAudioId(avatarId);
-      
-      // Reset when audio finishes
-      audio.onended = () => {
-        setPlayingAudioId(null);
-        audioRef.current = null;
-      };
-    }
-  };
-
-  useEffect(() => {
-    // Clean up audio when component unmounts or popup closes
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   return (
@@ -207,10 +166,10 @@ const AvatarPopup = ({ isOpen, onClose }) => {
                 {displayedAvatars.map((avatar) => (
                   <div
                     key={avatar.id}
-                    className="border rounded-lg overflow-hidden hover:border-purple-500 cursor-pointer transition-all hover:shadow-md relative flex flex-col h-[200px]"
+                    className="border border-gray-200 rounded-lg overflow-hidden hover:border-purple-300 hover:shadow-md cursor-pointer transition-all relative flex flex-col h-[200px] bg-white"
                   >
                     {/* Image container - optimized for avatar display */}
-                    <div className="w-full h-[140px] bg-gray-100 relative overflow-hidden flex items-center justify-center">
+                    <div className="w-full h-[140px] bg-gray-50 relative overflow-hidden flex items-center justify-center">
                       {avatar.thumbnail_url ? (
                         <img 
                           src={avatar.thumbnail_url} 
@@ -219,35 +178,19 @@ const AvatarPopup = ({ isOpen, onClose }) => {
                           loading="lazy"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center text-gray-600 font-medium text-xl">
+                        <div className="w-full h-full bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center text-gray-500 font-medium text-xl">
                           {avatar.name?.[0] || '?'}
                         </div>
                       )}
                     </div>
                     
                     {/* Info container */}
-                    <div className="p-2 bg-white flex-1 flex flex-col justify-between">
+                    <div className="p-2 bg-white flex-1 flex flex-col justify-between border-t border-gray-100">
                       <p className="text-sm font-medium text-gray-700 truncate">{avatar.name || 'Unnamed Avatar'}</p>
                       <div className="flex items-center justify-between mt-1">
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-gray-50 text-gray-600 border border-gray-100">
                           {avatar.gender || 'Unknown'}
                         </span>
-                        {avatar.preview_video_url && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handlePlayAudio(avatar.id, avatar.preview_video_url);
-                            }}
-                            className="p-1 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
-                            title={playingAudioId === avatar.id ? "Stop preview" : "Play preview"}
-                          >
-                            {playingAudioId === avatar.id ? (
-                              <IoPauseOutline className="w-3 h-3" />
-                            ) : (
-                              <IoPlayOutline className="w-3 h-3" />
-                            )}
-                          </button>
-                        )}
                       </div>
                     </div>
                   </div>

@@ -7,14 +7,16 @@ const HEYGEN_API_URL = 'https://api.heygen.com/v2';
 const ENDPOINTS = {
   AVATARS: 'avatars', // Lấy danh sách avatars
   VOICES: 'voices', // Lấy danh sách voices
+  AVATAR_GROUP_LIST:"avatar_group.list",
+  AVATAR_GROUP_DETAIL:"avatar_group/{group_id}/avatars",
 };
 
-const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
+const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
 const cache = {
   data: {},
   timestamp: {}
 };
-const CACHE_ENDPOINTS = ['AVATARS', 'VOICES'];
+const CACHE_ENDPOINTS = ['AVATARS', 'VOICES', 'AVATAR_GROUP_LIST'];
 
 export async function GET(request) {
   try {
