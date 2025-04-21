@@ -47,7 +47,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
     const lastItem = voiceItems[voiceItems.length - 1];
     const newItem = {
       id: newId,
-      avatar: lastItem ? { ...lastItem.avatar } : {
+      character: lastItem ? { ...lastItem.character } : {
         avatar_id: '',
         avatar_name: '',
         preview_image_url: '',
@@ -74,7 +74,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
     const newId = Math.max(...voiceItems.map(item => item.id)) + 1;
     const newItem = {
       id: newId,
-      avatar: { ...currentItem.avatar },
+      character: { ...currentItem.character },
       voice: { ...currentItem.voice },
       text: '',
       sequence: voiceItems[currentIndex].sequence + 1
@@ -137,12 +137,12 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
               </div>
               <div className="flex-grow">
                 <div className="flex items-center space-x-2">
-                  {item.avatar.avatar_id ? (
+                  {item.character.avatar_id ? (
                     <div className="w-8 h-8 bg-gray-100 rounded-full">
-                      {item.avatar.preview_image_url && (
+                      {item.character.preview_image_url && (
                         <img 
-                          src={item.avatar.preview_image_url} 
-                          alt={item.avatar.avatar_name}
+                          src={item.character.preview_image_url} 
+                          alt={item.character.avatar_name}
                           className="w-full h-full rounded-full object-cover"
                         />
                       )}
@@ -152,7 +152,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                     </div>
                   )}
                   <span className="font-medium text-gray-700">
-                    {item.avatar.avatar_name || 'No Avatar'} - {item.voice.voice_name || 'No Voice'}{item.voice.language ? ` (${item.voice.language})` : ''}
+                    {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}{item.voice.language ? ` (${item.voice.language})` : ''}
                   </span>
                 </div>
                 <div className="mt-2">

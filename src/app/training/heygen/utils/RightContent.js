@@ -32,17 +32,17 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
     setIsVoicePopupOpen(true);
   };
 
-  const handleAvatarSelect = (avatar) => {
+  const handleAvatarSelect = (character) => {
     if (selectedItem) {
       setVoiceItems(items =>
         items.map(item =>
           item.id === selectedItem.id
             ? {
                 ...item,
-                avatar: {
-                  avatar_id: avatar.id,
-                  avatar_name: avatar.name,
-                  preview_image_url: avatar.thumbnail_url,
+                character: {
+                  avatar_id: character.id,
+                  avatar_name: character.name,
+                  preview_image_url: character.thumbnail_url,
                 }
               }
             : item
@@ -154,7 +154,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
                 </div>
                 <div>
                   <p className="text-sm font-medium">
-                    {item.avatar.avatar_name || 'No Avatar'} - {item.voice.voice_name || 'No Voice'}
+                    {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}
                   </p>
                   <p className="text-xs text-gray-500 truncate max-w-[100px]">{item.text}</p>
                 </div>

@@ -7,11 +7,13 @@ import RightContent from './utils/RightContent';
 export default function HeygenPage() {
   const [voiceItems, setVoiceItems] = useState([
     {
-      id: 1, avatar: {
+      id: 1, 
+      character: {
         avatar_id: '',
-        avatar_name: '',
+        avatar_id: '',
         preview_image_url: '',
-      }, voice: {
+      }, 
+      voice: {
         voice_id: '',
         voice_name: '',
         language: '',
@@ -37,8 +39,8 @@ export default function HeygenPage() {
           setSelectedItem={setSelectedItem}
         />
         <div className="w-3/5 p-4 bg-gray-100">
-          <RightContent 
-            voiceItems={voiceItems} 
+          <RightContent
+            voiceItems={voiceItems}
             setVoiceItems={setVoiceItems}
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
