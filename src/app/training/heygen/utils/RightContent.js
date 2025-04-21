@@ -156,7 +156,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
                   <p className="text-sm font-medium">
                     {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}
                   </p>
-                  <p className="text-xs text-gray-500 truncate max-w-[100px]">{item.text}</p>
+                  <p className="text-xs text-gray-500 truncate max-w-[100px]">{item.voice.input_text}</p>
                 </div>
               </div>
             ))}

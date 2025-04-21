@@ -25,7 +25,6 @@ export default function HeygenPage() {
         type: '', // color or image or video
         value: '',
       },
-      text: '12',
       sequence: 1
     },
   ]);

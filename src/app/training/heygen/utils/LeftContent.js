@@ -20,7 +20,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
   const handleTextChange = (id, newText) => {
     setVoiceItems(items =>
       items.map(item =>
-        item.id === id ? { ...item, text: newText } : item
+        item.id === id ? { ...item, voice: { ...item.voice, input_text: newText } } : item
       )
     );
     adjustTextareaHeight(textareaRefs.current[id]);
@@ -57,8 +57,8 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
         voice_name: '',
         language: '',
         preview_audio: '',
+        input_text: '',
       },
-      text: '',
       sequence: newSequence
     };
     setVoiceItems(items => [...items, newItem]);
@@ -75,8 +75,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
     const newItem = {
       id: newId,
       character: { ...currentItem.character },
-      voice: { ...currentItem.voice },
-      text: '',
+      voice: { ...currentItem.voice, input_text: '' },
       sequence: voiceItems[currentIndex].sequence + 1
     };
 
@@ -158,7 +157,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                 <div className="mt-2">
                   <textarea
                     ref={el => textareaRefs.current[item.id] = el}
-                    value={item.text}
+                    value={item.voice.input_text}
                     onChange={(e) => handleTextChange(item.id, e.target.value)}
                     className="w-full p-2 text-gray-600 outline-none resize-none bg-transparent focus:bg-gray-50 rounded-md transition-colors duration-200 overflow-hidden"
                     placeholder="Enter text for voice generation..."
