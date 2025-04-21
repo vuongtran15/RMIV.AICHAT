@@ -15,7 +15,7 @@ const VoicePopup = ({ isOpen, onClose }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [groupedVoices, setGroupedVoices] = useState({});
   const [expandedLanguages, setExpandedLanguages] = useState({});
-  const audioRef = useRef(new Audio());
+  const audioRef = useRef(typeof window !== 'undefined' ? new Audio() : null);
   const containerRef = useRef(null);
   const ITEMS_PER_PAGE = 12;
 

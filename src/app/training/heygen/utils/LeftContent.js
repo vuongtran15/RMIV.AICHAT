@@ -46,7 +46,7 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
     const newSequence = voiceItems.length + 1;
     const newItem = {
       id: newId,
-      voice: 'Annie',
+      voice: '',
       text: '',
       sequence: newSequence
     };
@@ -62,7 +62,7 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
     const newId = Math.max(...voiceItems.map(item => item.id)) + 1;
     const newItem = {
       id: newId,
-      voice: 'Annie',
+      voice: '',
       text: '',
       sequence: voiceItems[currentIndex].sequence + 1
     };

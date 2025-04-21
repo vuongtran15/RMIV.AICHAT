@@ -6,9 +6,9 @@ import RightContent from './utils/RightContent';
 
 export default function HeygenPage() {
   const [voiceItems, setVoiceItems] = useState([
-    { id: 1, voice: 'Annie', text: '12', sequence: 1 },
-    { id: 2, voice: 'Annie', text: '321', sequence: 2 },
-    { id: 3, voice: 'Annie', text: '123132', sequence: 3 },
+    { id: 1, avatar: '', avatar_id: '', voice: '', text: '12', sequence: 1 },
+    { id: 2, avatar: '', avatar_id: '', voice: '', text: '321', sequence: 2 },
+    { id: 3, avatar: '', avatar_id: '', voice: '', text: '123132', sequence: 3 },
   ]);
 
   return (
