@@ -14,10 +14,16 @@ export default function HeygenPage() {
         preview_image_url: '',
       }, 
       voice: {
+        type: 'text', // text only
         voice_id: '',
         voice_name: '',
         language: '',
+        input_text: '',
         preview_audio: '',
+      },
+      background:{
+        type: '', // color or image or video
+        value: '',
       },
       text: '12',
       sequence: 1
