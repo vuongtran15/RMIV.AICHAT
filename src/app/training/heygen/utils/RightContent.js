@@ -6,19 +6,68 @@ import AvatarPopup from './AvatarPopup';
 import VoicePopup from './VoicePopup';
 import { BsMicFill } from 'react-icons/bs';
 
-const RightContent = ({ voiceItems }) => {
+const RightContent = ({ voiceItems, setVoiceItems, selectedItem }) => {
   const [activeTab, setActiveTab] = useState('avatar');
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = useState(false);
   const [isVoicePopupOpen, setIsVoicePopupOpen] = useState(false);
 
   const handleAvatarClick = () => {
+    if (!selectedItem) {
+      alert('Please select an item first');
+      return;
+    }
     setActiveTab('avatar');
     setIsAvatarPopupOpen(true);
   };
 
   const handleVoiceClick = () => {
+    if (!selectedItem) {
+      alert('Please select an item first');
+      return;
+    }
     setActiveTab('voice');
     setIsVoicePopupOpen(true);
+  };
+
+  const handleAvatarSelect = (avatar) => {
+    if (selectedItem) {
+      setVoiceItems(items =>
+        items.map(item =>
+          item.id === selectedItem.id
+            ? {
+                ...item,
+                avatar: {
+                  avatar_id: avatar.id,
+                  avatar_name: avatar.name,
+                  preview_image_url: avatar.thumbnail_url,
+                }
+              }
+            : item
+        )
+      );
+    }
+    setIsAvatarPopupOpen(false);
+  };
+
+  const handleVoiceSelect = (voice) => {
+    if (selectedItem) {
+      setVoiceItems(items =>
+        items.map(item =>
+          item.id === selectedItem.id
+            ? {
+                ...item,
+                voice: {
+                  voice_id: voice.id,
+                  voice_name: voice.name,
+                  language: voice.language,
+                  preview_audio: voice.preview_audio,
+                }
+              }
+            : item
+        )
+      );
+    }
+    setIsVoicePopupOpen(false);
   };
 
   return (
@@ -98,12 +147,14 @@ const RightContent = ({ voiceItems }) => {
       <AvatarPopup 
         isOpen={isAvatarPopupOpen}
         onClose={() => setIsAvatarPopupOpen(false)}
+        onSelect={handleAvatarSelect}
       />
 
       {/* Voice Popup */}
       <VoicePopup 
         isOpen={isVoicePopupOpen}
         onClose={() => setIsVoicePopupOpen(false)}
+        onSelect={handleVoiceSelect}
       />
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 
-const VoicePopup = ({ isOpen, onClose }) => {
+const VoicePopup = ({ isOpen, onClose, onSelect }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [voices, setVoices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -159,23 +159,28 @@ const VoicePopup = ({ isOpen, onClose }) => {
   };
 
   // Handle audio playback
-  const handlePlayVoice = (voice) => {
-    if (currentlyPlaying === voice.id) {
-      // If the same voice is already playing, toggle play/pause
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
+  const handlePlayVoice = async (voice) => {
+    try {
+      if (currentlyPlaying === voice.id) {
+        // If the same voice is already playing, toggle play/pause
+        if (isPlaying) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        } else {
+          await audioRef.current.play();
+          setIsPlaying(true);
+        }
       } else {
-        audioRef.current.play();
+        // If a different voice is selected, stop current audio and play the new one
+        audioRef.current.pause();
+        audioRef.current.src = voice.preview_audio;
+        await audioRef.current.play();
+        setCurrentlyPlaying(voice.id);
         setIsPlaying(true);
       }
-    } else {
-      // If a different voice is selected, stop current audio and play the new one
-      audioRef.current.pause();
-      audioRef.current.src = voice.preview_audio;
-      audioRef.current.play();
-      setCurrentlyPlaying(voice.id);
-      setIsPlaying(true);
+    } catch (error) {
+      console.error('Error playing audio:', error);
+      setIsPlaying(false);
     }
   };
 
@@ -291,13 +296,19 @@ const VoicePopup = ({ isOpen, onClose }) => {
                           <div
                             key={voice.id}
                             className="border border-gray-200 rounded-lg overflow-hidden hover:border-purple-300 hover:shadow-md cursor-pointer transition-all relative flex flex-col h-[200px] bg-white"
+                            onClick={() => onSelect(voice)}
                           >
                             {/* Voice icon container with play functionality */}
                             <div 
-                              className="w-full h-[140px] bg-gray-50 relative overflow-hidden flex items-center justify-center cursor-pointer"
-                              onClick={() => handlePlayVoice(voice)}
+                              className="w-full h-[140px] bg-gray-50 relative overflow-hidden flex items-center justify-center"
                             >
-                              <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+                              <div 
+                                className="w-16 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handlePlayVoice(voice);
+                                }}
+                              >
                                 {currentlyPlaying === voice.id && isPlaying ? (
                                   <BsPauseFill className="h-8 w-8 text-purple-500" />
                                 ) : (

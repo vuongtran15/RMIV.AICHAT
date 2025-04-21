@@ -5,7 +5,7 @@ import { FiTrash2, FiPlusCircle } from 'react-icons/fi';
 
 const MAX_ITEMS = 20;
 
-export default function LeftContent({ voiceItems, setVoiceItems }) {
+export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, setSelectedItem }) {
   const [openMenuId, setOpenMenuId] = useState(null);
   const [title, setTitle] = useState('Untitled Video');
   const textareaRefs = useRef({});
@@ -44,14 +44,15 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
     }
     const newId = voiceItems.length > 0 ? Math.max(...voiceItems.map(item => item.id)) + 1 : 1;
     const newSequence = voiceItems.length + 1;
+    const lastItem = voiceItems[voiceItems.length - 1];
     const newItem = {
       id: newId,
-      avatar: {
+      avatar: lastItem ? { ...lastItem.avatar } : {
         avatar_id: '',
         avatar_name: '',
         preview_image_url: '',
       },
-      voice: {
+      voice: lastItem ? { ...lastItem.voice } : {
         voice_id: '',
         voice_name: '',
         language: '',
@@ -69,20 +70,12 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
       return;
     }
     const currentIndex = voiceItems.findIndex(item => item.id === currentId);
+    const currentItem = voiceItems[currentIndex];
     const newId = Math.max(...voiceItems.map(item => item.id)) + 1;
     const newItem = {
       id: newId,
-      avatar: {
-        avatar_id: '',
-        avatar_name: '',
-        preview_image_url: '',
-      },
-      voice: {
-        voice_id: '',
-        voice_name: '',
-        language: '',
-        preview_audio: '',
-      },
+      avatar: { ...currentItem.avatar },
+      voice: { ...currentItem.voice },
       text: '',
       sequence: voiceItems[currentIndex].sequence + 1
     };
@@ -132,7 +125,13 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
       <div className="flex-1 overflow-y-auto px-4 [&::-webkit-scrollbar]:w-[1px] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
         <div className="space-y-4 pr-2">
           {voiceItems.map((item) => (
-            <div key={item.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
+            <div 
+              key={item.id} 
+              className={`flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer ${
+                selectedItem?.id === item.id ? 'bg-gray-100' : ''
+              }`}
+              onClick={() => setSelectedItem(item)}
+            >
               <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-gray-600">
                 {item.sequence}
               </div>
@@ -153,7 +152,7 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
                     </div>
                   )}
                   <span className="font-medium text-gray-700">
-                    {item.avatar.avatar_name || 'No Avatar'} - {item.voice.voice_name || 'No Voice'}
+                    {item.avatar.avatar_name || 'No Avatar'} - {item.voice.voice_name || 'No Voice'}{item.voice.language ? ` (${item.voice.language})` : ''}
                   </span>
                 </div>
                 <div className="mt-2">

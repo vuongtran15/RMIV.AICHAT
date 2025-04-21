@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5';
 
-const AvatarPopup = ({ isOpen, onClose }) => {
+const AvatarPopup = ({ isOpen, onClose, onSelect }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -167,6 +167,7 @@ const AvatarPopup = ({ isOpen, onClose }) => {
                   <div
                     key={avatar.id}
                     className="border border-gray-200 rounded-lg overflow-hidden hover:border-purple-300 hover:shadow-md cursor-pointer transition-all relative flex flex-col h-[200px] bg-white"
+                    onClick={() => onSelect(avatar)}
                   >
                     {/* Image container - optimized for avatar display */}
                     <div className="w-full h-[140px] bg-gray-50 relative overflow-hidden flex items-center justify-center">

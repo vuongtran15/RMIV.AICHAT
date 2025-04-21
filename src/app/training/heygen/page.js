@@ -21,6 +21,7 @@ export default function HeygenPage() {
       sequence: 1
     },
   ]);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   return (
     <div className="w-full h-full">
@@ -32,9 +33,15 @@ export default function HeygenPage() {
         <LeftContent
           voiceItems={voiceItems}
           setVoiceItems={setVoiceItems}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
         />
         <div className="w-3/5 p-4 bg-gray-100">
-          <RightContent voiceItems={voiceItems} />
+          <RightContent 
+            voiceItems={voiceItems} 
+            setVoiceItems={setVoiceItems}
+            selectedItem={selectedItem}
+          />
         </div>
       </div>
     </div>
