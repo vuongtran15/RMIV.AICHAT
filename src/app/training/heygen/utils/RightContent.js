@@ -34,57 +34,57 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
 
   const handleAvatarSelect = (character) => {
     if (selectedItem) {
+      const updatedItem = {
+        ...selectedItem,
+        character: {
+          avatar_id: character.id,
+          avatar_name: character.name,
+          preview_image_url: character.thumbnail_url,
+        }
+      };
       setVoiceItems(items =>
         items.map(item =>
-          item.id === selectedItem.id
-            ? {
-                ...item,
-                character: {
-                  avatar_id: character.id,
-                  avatar_name: character.name,
-                  preview_image_url: character.thumbnail_url,
-                }
-              }
-            : item
+          item.id === selectedItem.id ? updatedItem : item
         )
       );
+      setSelectedItem(updatedItem);
     }
     setIsAvatarPopupOpen(false);
   };
 
   const handleVoiceSelect = (voice) => {
     if (selectedItem) {
+      const updatedItem = {
+        ...selectedItem,
+        voice: {
+          voice_id: voice.id,
+          voice_name: voice.name,
+          language: voice.language,
+          preview_audio: voice.preview_audio,
+        }
+      };
       setVoiceItems(items =>
         items.map(item =>
-          item.id === selectedItem.id
-            ? {
-                ...item,
-                voice: {
-                  voice_id: voice.id,
-                  voice_name: voice.name,
-                  language: voice.language,
-                  preview_audio: voice.preview_audio,
-                }
-              }
-            : item
+          item.id === selectedItem.id ? updatedItem : item
         )
       );
+      setSelectedItem(updatedItem);
     }
     setIsVoicePopupOpen(false);
   };
 
   const handleMediaSelect = (media) => {
     if (selectedItem) {
+      const updatedItem = {
+        ...selectedItem,
+        media: media
+      };
       setVoiceItems(items =>
         items.map(item =>
-          item.id === selectedItem.id
-            ? {
-                ...item,
-                media: media
-              }
-            : item
+          item.id === selectedItem.id ? updatedItem : item
         )
       );
+      setSelectedItem(updatedItem);
     }
     setIsMediaPopupOpen(false);
   };
@@ -111,15 +111,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
         >
           <BsMicFill className="w-5 h-5" />
         </div>
-        <div 
-          onClick={() => setActiveTab('text')}
-          className={`p-3 rounded flex items-center justify-center w-12 h-12 transition-all
-            ${activeTab === 'text' 
-              ? 'bg-red-100 text-red-500' 
-              : 'text-gray-500 hover:bg-gray-100'}`}
-        >
-          <MdTextFields className="w-5 h-5" />
-        </div>
+        
         <div 
           onClick={() => {
             setActiveTab('media');

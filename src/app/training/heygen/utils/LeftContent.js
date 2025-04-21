@@ -18,11 +18,13 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
   };
 
   const handleTextChange = (id, newText) => {
-    setVoiceItems(items =>
-      items.map(item =>
-        item.id === id ? { ...item, voice: { ...item.voice, input_text: newText } } : item
-      )
+
+    var updatedItems = voiceItems.map(item => 
+      item.id === id ? { ...item, voice: { ...item.voice, input_text: newText } } : item
     );
+
+    setVoiceItems(updatedItems);
+    setSelectedItem(updatedItems.find(item => item.id === id));
     adjustTextareaHeight(textareaRefs.current[id]);
   };
 

@@ -163,7 +163,7 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
         <img
           src={character.preview_image_url}
           alt="Character"
-          className="w-full h-full object-contain"
+          className="w-full h-full object-cover"
           draggable="false"
         />
       </div>
