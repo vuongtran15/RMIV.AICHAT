@@ -1,12 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const DraggableCharacter = ({ character, position, onPositionChange, size, onSizeChange }) => {
+const DraggableCharacter = ({ character, position, onPositionChange, size, onSizeChange, onUpdateCharacter }) => {
   const dragRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isResizing, setIsResizing] = useState(false);
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [resizeDirection, setResizeDirection] = useState('');
+
+  // Update character data whenever position or size changes
+  useEffect(() => {
+    if (onUpdateCharacter) {
+      onUpdateCharacter({
+        ...character,
+        position,
+        size
+      });
+    }
+  }, [position, size, character, onUpdateCharacter]);
 
   useEffect(() => {
     const element = dragRef.current;
@@ -179,9 +190,51 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
   );
 };
 
-const MainContent = ({ selectedItem }) => {
-  const [characterPosition, setCharacterPosition] = useState({ x: 0, y: 0 });
-  const [characterSize, setCharacterSize] = useState({ width: 200, height: 200 });
+const MainContent = ({ selectedItem, onUpdateItem }) => {
+  const [characterPosition, setCharacterPosition] = useState(selectedItem?.character?.position || { x: 0, y: 0 });
+  const [characterSize, setCharacterSize] = useState(selectedItem?.character?.size || { width: 200, height: 200 });
+  const [contentBoxSize, setContentBoxSize] = useState({ width: 0, height: 0 });
+  const contentBoxRef = useRef(null);
+
+  // Update character position and size when selectedItem changes
+  useEffect(() => {
+    if (selectedItem?.character) {
+      setCharacterPosition(selectedItem.character.position || { x: 0, y: 0 });
+      setCharacterSize(selectedItem.character.size || { width: 200, height: 200 });
+    }
+  }, [selectedItem]);
+
+  // Load saved content box size on component mount
+  useEffect(() => {
+    const savedContentBoxSize = localStorage.getItem('content_box_size');
+    if (savedContentBoxSize) {
+      setContentBoxSize(JSON.parse(savedContentBoxSize));
+    }
+  }, []);
+
+  // Save content box size whenever it changes
+  useEffect(() => {
+    if (contentBoxSize.width > 0 && contentBoxSize.height > 0) {
+      localStorage.setItem('content_box_size', JSON.stringify(contentBoxSize));
+    }
+  }, [contentBoxSize]);
+
+  // Update content box size when window resizes
+  useEffect(() => {
+    const updateContentBoxSize = () => {
+      if (contentBoxRef.current) {
+        const { width, height } = contentBoxRef.current.getBoundingClientRect();
+        setContentBoxSize({ width, height });
+      }
+    };
+
+    updateContentBoxSize();
+    window.addEventListener('resize', updateContentBoxSize);
+
+    return () => {
+      window.removeEventListener('resize', updateContentBoxSize);
+    };
+  }, []);
 
   const getBackgroundStyle = () => {
     if (!selectedItem?.background) return 'bg-purple-500';
@@ -200,6 +253,15 @@ const MainContent = ({ selectedItem }) => {
     }
   };
 
+  const handleUpdateCharacter = (updatedCharacter) => {
+    if (onUpdateItem) {
+      onUpdateItem({
+        ...selectedItem,
+        character: updatedCharacter
+      });
+    }
+  };
+
   return (
     <div className="flex-1 relative overflow-hidden">
       {!selectedItem ? (
@@ -210,7 +272,11 @@ const MainContent = ({ selectedItem }) => {
           </div>
         </div>
       ) : (
-        <div id='main-content-box' className="absolute w-[calc(100%-0rem)] h-[calc(100%-0rem)]">
+        <div 
+          id='main-content-box' 
+          ref={contentBoxRef}
+          className="absolute w-[calc(100%-0rem)] h-[calc(100%-0rem)]"
+        >
           <div className={`w-full h-full relative ${typeof getBackgroundStyle() === 'string' ? getBackgroundStyle() : ''}`}
             style={selectedItem?.background?.type === 'color' 
               ? getBackgroundStyle()
@@ -234,6 +300,7 @@ const MainContent = ({ selectedItem }) => {
                 onPositionChange={setCharacterPosition}
                 size={characterSize}
                 onSizeChange={setCharacterSize}
+                onUpdateCharacter={handleUpdateCharacter}
               />
             )}
           </div>
