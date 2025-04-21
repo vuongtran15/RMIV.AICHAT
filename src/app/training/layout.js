@@ -158,8 +158,8 @@ export default function TrainingLayout({ children }) {
         </div>
         
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gradient-to-br from-pink-50 to-rose-50">
-          <div className="bg-white rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gradient-to-br from-pink-50 to-rose-50 h-full">
+          <div className="bg-white rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg h-full">
             {children}
           </div>
         </main>
