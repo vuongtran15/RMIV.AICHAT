@@ -39,34 +39,45 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
         let newWidth = size.width;
         let newHeight = size.height;
 
+        // Get the main content box boundaries
+        const mainContentBox = document.getElementById('main-content-box');
+        if (!mainContentBox) return;
+        
+        const boxRect = mainContentBox.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        
+        // Calculate maximum allowed dimensions based on current position
+        const maxWidth = boxRect.width - position.x;
+        const maxHeight = boxRect.height - position.y;
+
         switch (resizeDirection) {
           case 'n':
-            newHeight = Math.max(50, resizeStart.height - deltaY);
+            newHeight = Math.max(50, Math.min(resizeStart.height - deltaY, position.y + resizeStart.height));
             break;
           case 's':
-            newHeight = Math.max(50, resizeStart.height + deltaY);
+            newHeight = Math.max(50, Math.min(resizeStart.height + deltaY, maxHeight));
             break;
           case 'e':
-            newWidth = Math.max(50, resizeStart.width + deltaX);
+            newWidth = Math.max(50, Math.min(resizeStart.width + deltaX, maxWidth));
             break;
           case 'w':
-            newWidth = Math.max(50, resizeStart.width - deltaX);
+            newWidth = Math.max(50, Math.min(resizeStart.width - deltaX, position.x + resizeStart.width));
             break;
           case 'ne':
-            newWidth = Math.max(50, resizeStart.width + deltaX);
-            newHeight = Math.max(50, resizeStart.height - deltaY);
+            newWidth = Math.max(50, Math.min(resizeStart.width + deltaX, maxWidth));
+            newHeight = Math.max(50, Math.min(resizeStart.height - deltaY, position.y + resizeStart.height));
             break;
           case 'nw':
-            newWidth = Math.max(50, resizeStart.width - deltaX);
-            newHeight = Math.max(50, resizeStart.height - deltaY);
+            newWidth = Math.max(50, Math.min(resizeStart.width - deltaX, position.x + resizeStart.width));
+            newHeight = Math.max(50, Math.min(resizeStart.height - deltaY, position.y + resizeStart.height));
             break;
           case 'se':
-            newWidth = Math.max(50, resizeStart.width + deltaX);
-            newHeight = Math.max(50, resizeStart.height + deltaY);
+            newWidth = Math.max(50, Math.min(resizeStart.width + deltaX, maxWidth));
+            newHeight = Math.max(50, Math.min(resizeStart.height + deltaY, maxHeight));
             break;
           case 'sw':
-            newWidth = Math.max(50, resizeStart.width - deltaX);
-            newHeight = Math.max(50, resizeStart.height + deltaY);
+            newWidth = Math.max(50, Math.min(resizeStart.width - deltaX, position.x + resizeStart.width));
+            newHeight = Math.max(50, Math.min(resizeStart.height + deltaY, maxHeight));
             break;
         }
 
@@ -118,12 +129,13 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
 
   const ResizeHandle = ({ direction }) => (
     <div
-      className={`resize-handle absolute bg-light-blue-500 w-3 h-3 rounded-full cursor-${direction}-resize`}
+      className={`resize-handle absolute bg-light-blue-500 w-3 h-3 rounded-full`}
       data-direction={direction}
       style={{
         [direction.includes('n') ? 'top' : 'bottom']: '-4px',
         [direction.includes('e') ? 'right' : 'left']: '-4px',
-        transform: direction.includes('n') || direction.includes('s') ? 'translateY(50%)' : 'translateX(50%)'
+        transform: direction.includes('n') || direction.includes('s') ? 'translateY(50%)' : 'translateX(50%)',
+        cursor: `${direction}-resize`
       }}
     />
   );
@@ -142,12 +154,19 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
         boxSizing: 'border-box'
       }}
     >
-      <img
-        src={character.preview_image_url}
-        alt="Character"
-        className="w-full h-full object-contain"
-        draggable="false"
-      />
+      <div 
+        className="w-full h-full"
+        style={{
+          cursor: isDragging ? 'grabbing' : 'grab'
+        }}
+      >
+        <img
+          src={character.preview_image_url}
+          alt="Character"
+          className="w-full h-full object-contain"
+          draggable="false"
+        />
+      </div>
       <ResizeHandle direction="n" />
       <ResizeHandle direction="s" />
       <ResizeHandle direction="e" />
@@ -180,7 +199,7 @@ const MainContent = ({ selectedItem }) => {
   };
 
   return (
-    <div className="flex-1 bg-purple-500 relative">
+    <div className="flex-1 relative overflow-hidden">
       {!selectedItem ? (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-white text-center">
