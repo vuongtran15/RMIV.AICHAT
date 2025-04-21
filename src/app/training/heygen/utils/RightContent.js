@@ -4,16 +4,19 @@ import { MdTextFields } from 'react-icons/md';
 import { IoImageOutline } from 'react-icons/io5';
 import AvatarPopup from './AvatarPopup';
 import VoicePopup from './VoicePopup';
+import MediaPopup from './MediaPopup';
 import { BsMicFill } from 'react-icons/bs';
+import MainContent from './MainContent';
 
-const RightContent = ({ voiceItems, setVoiceItems, selectedItem }) => {
+const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem }) => {
   const [activeTab, setActiveTab] = useState('avatar');
   const [isAvatarPopupOpen, setIsAvatarPopupOpen] = useState(false);
   const [isVoicePopupOpen, setIsVoicePopupOpen] = useState(false);
+  const [isMediaPopupOpen, setIsMediaPopupOpen] = useState(false);
 
   const handleAvatarClick = () => {
     if (!selectedItem) {
-      alert('Please select an item first');
+      
       return;
     }
     setActiveTab('avatar');
@@ -22,7 +25,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem }) => {
 
   const handleVoiceClick = () => {
     if (!selectedItem) {
-      alert('Please select an item first');
+      
       return;
     }
     setActiveTab('voice');
@@ -70,6 +73,22 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem }) => {
     setIsVoicePopupOpen(false);
   };
 
+  const handleMediaSelect = (media) => {
+    if (selectedItem) {
+      setVoiceItems(items =>
+        items.map(item =>
+          item.id === selectedItem.id
+            ? {
+                ...item,
+                media: media
+              }
+            : item
+        )
+      );
+    }
+    setIsMediaPopupOpen(false);
+  };
+
   return (
     <div className="flex flex-col h-full">
       {/* Toolbar Section */}
@@ -102,7 +121,10 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem }) => {
           <MdTextFields className="w-5 h-5" />
         </div>
         <div 
-          onClick={() => setActiveTab('media')}
+          onClick={() => {
+            setActiveTab('media');
+            setIsMediaPopupOpen(true);
+          }}
           className={`p-3 rounded flex items-center justify-center w-12 h-12 transition-all
             ${activeTab === 'media' 
               ? 'bg-red-100 text-red-500' 
@@ -113,11 +135,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem }) => {
       </div>
 
       {/* Main Container */}
-      <div className="flex-1 bg-purple-500 relative">
-        <div className="absolute bottom-4 right-4">
-          {/* Add any additional controls here */}
-        </div>
-      </div>
+      <MainContent selectedItem={selectedItem} />
 
       {/* Footer Section */}
       <div className="h-32 border-t border-gray-200 bg-white rounded mt-4">
@@ -126,9 +144,12 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem }) => {
             {voiceItems.map((item, index) => (
               <div
                 key={item.id}
-                className="min-w-[150px] h-20 bg-white border border-gray-200 rounded-lg p-2 flex items-center gap-2"
+                onClick={() => setSelectedItem(item)}
+                className={`min-w-[150px] h-20 bg-white border rounded-lg p-2 flex items-center gap-2 cursor-pointer transition-all
+                  ${selectedItem?.id === item.id ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}
               >
-                <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                <div className={`p-2 w-10 rounded-full flex items-center justify-center
+                  ${selectedItem?.id === item.id ? 'bg-red-500 text-white' : 'bg-gray-200'}`}>
                   {index + 1}
                 </div>
                 <div>
@@ -142,6 +163,13 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem }) => {
           </div>
         </div>
       </div>
+
+      {/* Media Popup */}
+      <MediaPopup 
+        isOpen={isMediaPopupOpen}
+        onClose={() => setIsMediaPopupOpen(false)}
+        onSelect={handleMediaSelect}
+      />
 
       {/* Avatar Popup */}
       <AvatarPopup 

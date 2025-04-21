@@ -41,6 +41,7 @@ export default function HeygenPage() {
             voiceItems={voiceItems} 
             setVoiceItems={setVoiceItems}
             selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
           />
         </div>
       </div>
