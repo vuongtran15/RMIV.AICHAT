@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoClose, IoColorPaletteOutline, IoImageOutline, IoVideocamOutline } from 'react-icons/io5';
-import { ChromePicker } from 'react-color';
+import { SketchPicker,SwatchesPicker   } from 'react-color';
 
 const MediaPopup = ({ isOpen, onClose, onSelect }) => {
   const [selectedColor, setSelectedColor] = useState('#ffffff');
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedVideo, setUploadedVideo] = useState(null);
   const [selectedType, setSelectedType] = useState('color'); // 'color', 'image', or 'video'
+
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isOpen, onClose]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -114,8 +130,8 @@ const MediaPopup = ({ isOpen, onClose, onSelect }) => {
                   style={{ backgroundColor: selectedColor }}
                 />
               </div>
-              <div className="rounded-lg p-4 bg-gray-50">
-                <ChromePicker
+              <div className="rounded-lg p-1 bg-gray-50 flex justify-center items-center">
+                <SwatchesPicker  
                   color={selectedColor}
                   onChange={handleColorChange}
                   disableAlpha={true}
@@ -123,22 +139,19 @@ const MediaPopup = ({ isOpen, onClose, onSelect }) => {
                     default: {
                       picker: {
                         boxShadow: 'none',
-                        width: '100%'
-                      },
-                      saturation: {
-                        borderRadius: '0.5rem',
-                        marginBottom: '0.5rem'
-                      },
-                      hue: {
-                        borderRadius: '0.5rem',
-                        marginBottom: '0.5rem'
+                        width: '100%',
+                        height: '100%',
+                        
+                        fontFamily: 'Times New Roman'
                       },
                       swatch: {
-                        display: 'none'
+                        width: '100%',
+                        height: '100%',
+                        fontFamily: 'Times New Roman',
+                        fontSize: '10px'
                       },
-                      color: {
-                        display: 'none'
-                      }
+                      overflow: 'hidden'
+                      
                     }
                   }}
                 />

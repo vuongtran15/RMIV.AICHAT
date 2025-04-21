@@ -77,13 +77,18 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
     if (selectedItem) {
       const updatedItem = {
         ...selectedItem,
-        media: media
+        background: {
+          ...selectedItem.background,
+          type: media.type,
+          value: media.value
+        }
       };
       setVoiceItems(items =>
         items.map(item =>
           item.id === selectedItem.id ? updatedItem : item
         )
       );
+      console.log(updatedItem);
       setSelectedItem(updatedItem);
     }
     setIsMediaPopupOpen(false);

@@ -28,7 +28,8 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
     adjustTextareaHeight(textareaRefs.current[id]);
   };
 
-  const handleDeleteItem = (id) => {
+  const handleDeleteItem = (id, e) => {
+    e.stopPropagation();
     setVoiceItems(items => {
       const filteredItems = items.filter(item => item.id !== id);
       return filteredItems.map((item, index) => ({
@@ -37,6 +38,9 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
       }));
     });
     setOpenMenuId(null);
+    if (selectedItem?.id === id) {
+      setSelectedItem(null);
+    }
   };
 
   const handleAddItem = () => {
@@ -188,7 +192,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                       Insert After
                     </button>
                     <button
-                      onClick={() => handleDeleteItem(item.id)}
+                      onClick={(e) => handleDeleteItem(item.id, e)}
                       className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-gray-100"
                     >
                       <FiTrash2 className="mr-3 w-4 h-4" />

@@ -188,7 +188,9 @@ const MainContent = ({ selectedItem }) => {
     
     switch (selectedItem.background.type) {
       case 'color':
-        return `bg-[${selectedItem.background.value}]`;
+        return {
+          backgroundColor: selectedItem.background.value
+        };
       case 'image':
         return `bg-cover bg-center bg-no-repeat`;
       case 'video':
@@ -209,10 +211,12 @@ const MainContent = ({ selectedItem }) => {
         </div>
       ) : (
         <div id='main-content-box' className="absolute w-[calc(100%-0rem)] h-[calc(100%-0rem)]">
-          <div className={`w-full h-full relative ${getBackgroundStyle()}`}
-            style={selectedItem?.background?.type === 'image' ? {
-              backgroundImage: `url(${selectedItem.background.value})`
-            } : {}}>
+          <div className={`w-full h-full relative ${typeof getBackgroundStyle() === 'string' ? getBackgroundStyle() : ''}`}
+            style={selectedItem?.background?.type === 'color' 
+              ? getBackgroundStyle()
+              : selectedItem?.background?.type === 'image' 
+                ? { backgroundImage: `url(${selectedItem.background.value})` }
+                : {}}>
             {selectedItem.background?.type === 'video' && (
               <video 
                 src={selectedItem.background.value}
@@ -223,7 +227,7 @@ const MainContent = ({ selectedItem }) => {
               />
             )}
             
-            {selectedItem.character && (
+            {selectedItem.character && selectedItem.character.preview_image_url && (
               <DraggableCharacter
                 character={selectedItem.character}
                 position={characterPosition}
