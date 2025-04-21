@@ -22,7 +22,7 @@ const RightContent = ({ voiceItems }) => {
   };
 
   return (
-    <div className="flex flex-col h-full ">
+    <div className="flex flex-col h-full">
       {/* Toolbar Section */}
       <div className="h-16 border-b border-gray-200 flex items-center justify-center space-x-2 px-4 bg-white rounded mb-4">
         <div 
@@ -66,7 +66,7 @@ const RightContent = ({ voiceItems }) => {
       {/* Main Container */}
       <div className="flex-1 bg-purple-500 relative">
         <div className="absolute bottom-4 right-4">
-          
+          {/* Add any additional controls here */}
         </div>
       </div>
 
@@ -83,7 +83,9 @@ const RightContent = ({ voiceItems }) => {
                   {index + 1}
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Scene {index + 1}</p>
+                  <p className="text-sm font-medium">
+                    {item.avatar.avatar_name || 'No Avatar'} - {item.voice.voice_name || 'No Voice'}
+                  </p>
                   <p className="text-xs text-gray-500 truncate max-w-[100px]">{item.text}</p>
                 </div>
               </div>

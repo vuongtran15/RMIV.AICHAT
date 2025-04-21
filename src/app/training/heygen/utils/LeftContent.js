@@ -46,7 +46,17 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
     const newSequence = voiceItems.length + 1;
     const newItem = {
       id: newId,
-      voice: '',
+      avatar: {
+        avatar_id: '',
+        avatar_name: '',
+        preview_image_url: '',
+      },
+      voice: {
+        voice_id: '',
+        voice_name: '',
+        language: '',
+        preview_audio: '',
+      },
       text: '',
       sequence: newSequence
     };
@@ -62,7 +72,17 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
     const newId = Math.max(...voiceItems.map(item => item.id)) + 1;
     const newItem = {
       id: newId,
-      voice: '',
+      avatar: {
+        avatar_id: '',
+        avatar_name: '',
+        preview_image_url: '',
+      },
+      voice: {
+        voice_id: '',
+        voice_name: '',
+        language: '',
+        preview_audio: '',
+      },
       text: '',
       sequence: voiceItems[currentIndex].sequence + 1
     };
@@ -118,9 +138,23 @@ export default function LeftContent({ voiceItems, setVoiceItems }) {
               </div>
               <div className="flex-grow">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gray-100 rounded-full"></div>
-                  <span className="font-medium text-gray-700">{item.voice}</span>
-                  <MdKeyboardArrowRight className="w-4 h-4 text-gray-400" />
+                  {item.avatar.avatar_id ? (
+                    <div className="w-8 h-8 bg-gray-100 rounded-full">
+                      {item.avatar.preview_image_url && (
+                        <img 
+                          src={item.avatar.preview_image_url} 
+                          alt={item.avatar.avatar_name}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-xs text-gray-500">
+                    </div>
+                  )}
+                  <span className="font-medium text-gray-700">
+                    {item.avatar.avatar_name || 'No Avatar'} - {item.voice.voice_name || 'No Voice'}
+                  </span>
                 </div>
                 <div className="mt-2">
                   <textarea
