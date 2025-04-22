@@ -57,6 +57,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       const updatedItem = {
         ...selectedItem,
         voice: {
+          type: 'text',
           voice_id: voice.id,
           voice_name: voice.name,
           language: voice.language,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import { FiTrash2, FiPlusCircle } from 'react-icons/fi';
+import { FiTrash2, FiPlusCircle, FiVolumeX } from 'react-icons/fi';
 
 const MAX_ITEMS = 20;
 
@@ -59,12 +59,13 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
         preview_image_url: '',
       },
       voice: lastItem ? { ...lastItem.voice } : {
-        type: 'text', // text only
+        // type: 'text', // text only
         voice_id: '',
         voice_name: '',
         language: '',
         input_text: '',
         preview_audio: '',
+        duration: 0,
       },
       background: lastItem ? { ...lastItem.background } : {
         type: '', // color or image or video
@@ -87,6 +88,37 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
       id: newId,
       character: { ...currentItem.character },
       voice: { ...currentItem.voice, input_text: '' },
+      sequence: voiceItems[currentIndex].sequence + 1
+    };
+
+    setVoiceItems(items => {
+      const newItems = [...items];
+      newItems.splice(currentIndex + 1, 0, newItem);
+      return newItems.map((item, index) => ({
+        ...item,
+        sequence: index + 1
+      }));
+    });
+    setOpenMenuId(null);
+  };
+
+  const handleInsertSilenceVoice = (currentId) => {
+    if (voiceItems.length >= MAX_ITEMS) {
+      alert(`Maximum limit of ${MAX_ITEMS} items reached`);
+      return;
+    }
+    const currentIndex = voiceItems.findIndex(item => item.id === currentId);
+    const currentItem = voiceItems[currentIndex];
+    const newId = Math.max(...voiceItems.map(item => item.id)) + 1;
+    const newItem = {
+      id: newId,
+      character: { ...currentItem.character },
+      voice: { 
+        type: 'silence',
+        input_text: '', 
+        duration: 1 // Default silence duration of 1 second
+      },
+      background: { ...currentItem.background },
       sequence: voiceItems[currentIndex].sequence + 1
     };
 
@@ -195,6 +227,13 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                     >
                       <FiPlusCircle className="mr-3 w-4 h-4" />
                       Insert After
+                    </button>
+                    <button
+                      onClick={() => handleInsertSilenceVoice(item.id)}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+                    >
+                      <FiVolumeX className="mr-3 w-4 h-4" />
+                      Add Silence
                     </button>
                     <button
                       onClick={(e) => handleDeleteItem(item.id, e)}
