@@ -33,6 +33,8 @@ export default function HeygenPage() {
 
   const fnGenerateVideo = () => {
     console.log(voiceItems);
+    var dimension = { width: 1280, height: 720 };
+    // character: { box: { "width": 900, "height": 506 } ,"position": { "x": 606.1875, "y": 347 }, "size": { "width": 200, "height": 200 } }
   }
 
   return (
