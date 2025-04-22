@@ -183,6 +183,16 @@ const MainContent = ({ selectedItem, setVoiceItems }) => {
   const [characterPosition, setCharacterPosition] = useState({ x: 0, y: 0 });
   const [characterSize, setCharacterSize] = useState({ width: 200, height: 200 });
 
+  // Initialize character position and size from selectedItem
+  useEffect(() => {
+    if (selectedItem?.character?.position) {
+      setCharacterPosition(selectedItem.character.position);
+    }
+    if (selectedItem?.character?.size) {
+      setCharacterSize(selectedItem.character.size);
+    }
+  }, [selectedItem?.id]); // Only run when selectedItem changes
+
   const getBackgroundStyle = () => {
     if (!selectedItem?.background) return 'bg-purple-500';
     
@@ -205,12 +215,6 @@ const MainContent = ({ selectedItem, setVoiceItems }) => {
     // main content box
     const mainContentBox = document.getElementById('main-content-box');
     if (!mainContentBox) return;
-
-    
-    // mainContentBox.style.width = `${characterSize.width}px`;
-    // mainContentBox.style.height = `${characterSize.height}px`;
-    // mainContentBox.style.left = `${characterPosition.x}px`;
-    // mainContentBox.style.top = `${characterPosition.y}px`;
 
     setVoiceItems(items => {
       const updatedItems = items.map(item => {
