@@ -31,9 +31,6 @@ const VoicePopup = ({ isOpen, onClose, onSelect }) => {
           throw new Error('Failed to fetch voices');
         }
         const data = await response.json();
-        //{ "voice_id": "c8e176c17f814004885fd590e03ff99f", "language": "Multilingual", "gender": "female", "name": "Elizabeth", "preview_audio": "https://static.heygen.ai/voice_preview/nFpfJnrcHH8kBy4pGkLKT6.wav", "support_pause": false, "emotion_support": true, "support_interactive_avatar": true }
-        console.log(data.data.voices);
-        
         // Filter voices to only include specified languages
         const allowedLanguages = ['Multilingual', 'English', 'Chinese', 'Vietnamese'];
         var voices = data.data.voices

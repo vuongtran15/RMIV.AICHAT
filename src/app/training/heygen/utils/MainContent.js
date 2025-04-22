@@ -194,7 +194,7 @@ const MainContent = ({ selectedItem, setVoiceItems }) => {
   }, [selectedItem?.id]); // Only run when selectedItem changes
 
   const getBackgroundStyle = () => {
-    if (!selectedItem?.background) return 'bg-purple-500';
+    if (!selectedItem?.background) return 'bg-white';
     
     switch (selectedItem.background.type) {
       case 'color':
@@ -206,12 +206,11 @@ const MainContent = ({ selectedItem, setVoiceItems }) => {
       case 'video':
         return 'bg-black';
       default:
-        return 'bg-purple-500';
+        return 'bg-white';
     }
   };
 
   useEffect(() => {
-    console.log(characterPosition, characterSize);
     // main content box
     const mainContentBox = document.getElementById('main-content-box');
     if (!mainContentBox) return;
@@ -231,11 +230,6 @@ const MainContent = ({ selectedItem, setVoiceItems }) => {
         return item;
       });
       return updatedItems;
-    });
-
-    console.log({
-      width: mainContentBox.offsetWidth,
-      height: mainContentBox.offsetHeight,
     });
   }, [characterPosition, characterSize, selectedItem, selectedItem?.character?.avatar_id]);
 

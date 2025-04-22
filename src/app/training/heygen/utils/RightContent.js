@@ -95,7 +95,6 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
           item.id === selectedItem.id ? updatedItem : item
         )
       );
-      console.log(updatedItem);
       setSelectedItem(updatedItem);
     }
     setIsMediaPopupOpen(false);

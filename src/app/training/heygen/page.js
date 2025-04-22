@@ -32,7 +32,7 @@ export default function HeygenPage() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const fnGenerateVideo = () => {
-    console.log('Generate video clicked');
+    console.log(voiceItems);
   }
 
   return (
