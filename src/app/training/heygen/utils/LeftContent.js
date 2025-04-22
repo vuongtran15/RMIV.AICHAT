@@ -18,10 +18,20 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
   };
 
   const handleTextChange = (id, newText) => {
-
-    var updatedItems = voiceItems.map(item => 
-      item.id === id ? { ...item, voice: { ...item.voice, input_text: newText } } : item
-    );
+    const item = voiceItems.find(item => item.id === id);
+    const isSilence = item.voice.type === 'silence';
+    
+    if (isSilence) {
+      // Convert input to number and validate between 1-100
+      const duration = Math.min(Math.max(parseInt(newText) || 0, 1), 100);
+      var updatedItems = voiceItems.map(item => 
+        item.id === id ? { ...item, voice: { ...item.voice, duration } } : item
+      );
+    } else {
+      var updatedItems = voiceItems.map(item => 
+        item.id === id ? { ...item, voice: { ...item.voice, input_text: newText } } : item
+      );
+    }
 
     setVoiceItems(updatedItems);
     setSelectedItem(updatedItems.find(item => item.id === id));
@@ -193,17 +203,21 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                     <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-xs text-gray-500">
                     </div>
                   )}
+                  {item.voice.type === 'silence' ? <span className='font-medium text-gray-700'>Silence {item.voice.duration}s</span>:
                   <span className="font-medium text-gray-700">
                     {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}{item.voice.language ? ` (${item.voice.language})` : ''}
-                  </span>
+                  </span>}
+
+
+                  
                 </div>
                 <div className="mt-2">
                   <textarea
                     ref={el => textareaRefs.current[item.id] = el}
-                    value={item.voice.input_text}
+                    value={item.voice.type === 'silence' ? item.voice.duration : item.voice.input_text}
                     onChange={(e) => handleTextChange(item.id, e.target.value)}
                     className="w-full p-2 text-gray-600 outline-none resize-none bg-transparent focus:bg-gray-50 rounded-md transition-colors duration-200 overflow-hidden"
-                    placeholder="Enter text for voice generation..."
+                    placeholder={item.voice.type === 'silence' ? "Enter silence duration (1-100s)..." : "Enter text for voice generation..."}
                     rows={1}
                   />
                 </div>

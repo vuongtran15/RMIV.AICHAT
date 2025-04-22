@@ -19,6 +19,9 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       
       return;
     }
+    if (selectedItem.voice.type === 'silence') {
+      return;
+    }
     setActiveTab('avatar');
     setIsAvatarPopupOpen(true);
   };
@@ -26,6 +29,9 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
   const handleVoiceClick = () => {
     if (!selectedItem) {
       
+      return;
+    }
+    if (selectedItem.voice.type === 'silence') {
       return;
     }
     setActiveTab('voice');
@@ -152,7 +158,14 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
                 </div>
                 <div>
                   <p className="text-sm font-medium">
-                    {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}
+
+                    {item.voice.type === 'silence' ? <span className='font-medium text-gray-700'>Silence {item.voice.duration}s</span>:
+                    <span className="font-medium text-gray-700">
+                      {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}
+                    </span>}
+
+
+                    
                   </p>
                   <p className="text-xs text-gray-500 truncate max-w-[100px]">{item.voice.input_text}</p>
                 </div>
