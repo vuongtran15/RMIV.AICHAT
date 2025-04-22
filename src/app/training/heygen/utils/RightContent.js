@@ -132,7 +132,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       </div>
 
       {/* Main Container */}
-      <MainContent selectedItem={selectedItem} />
+      <MainContent selectedItem={selectedItem} setVoiceItems={setVoiceItems} />
 
       {/* Footer Section */}
       <div className="h-32 border-t border-gray-200 bg-white rounded mt-4">

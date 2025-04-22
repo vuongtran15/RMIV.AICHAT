@@ -179,7 +179,7 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
   );
 };
 
-const MainContent = ({ selectedItem }) => {
+const MainContent = ({ selectedItem, setVoiceItems }) => {
   const [characterPosition, setCharacterPosition] = useState({ x: 0, y: 0 });
   const [characterSize, setCharacterSize] = useState({ width: 200, height: 200 });
 
@@ -199,6 +199,42 @@ const MainContent = ({ selectedItem }) => {
         return 'bg-purple-500';
     }
   };
+
+  useEffect(() => {
+    console.log(characterPosition, characterSize);
+    // main content box
+    const mainContentBox = document.getElementById('main-content-box');
+    if (!mainContentBox) return;
+
+    
+    // mainContentBox.style.width = `${characterSize.width}px`;
+    // mainContentBox.style.height = `${characterSize.height}px`;
+    // mainContentBox.style.left = `${characterPosition.x}px`;
+    // mainContentBox.style.top = `${characterPosition.y}px`;
+
+    setVoiceItems(items => {
+      const updatedItems = items.map(item => {
+        if (item.id === selectedItem.id) {
+          return { ...item, character: { ...item.character, 
+            position: characterPosition, 
+            size: characterSize,
+            box: {
+              width: mainContentBox.offsetWidth,
+              height: mainContentBox.offsetHeight,
+            }
+           } };
+        }
+        return item;
+      });
+      return updatedItems;
+    });
+
+    console.log({
+      width: mainContentBox.offsetWidth,
+      height: mainContentBox.offsetHeight,
+    });
+  }, [characterPosition, characterSize, selectedItem, selectedItem?.character?.avatar_id]);
+
 
   return (
     <div className="flex-1 relative overflow-hidden">

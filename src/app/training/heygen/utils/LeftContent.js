@@ -59,11 +59,16 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
         preview_image_url: '',
       },
       voice: lastItem ? { ...lastItem.voice } : {
+        type: 'text', // text only
         voice_id: '',
         voice_name: '',
         language: '',
-        preview_audio: '',
         input_text: '',
+        preview_audio: '',
+      },
+      background: lastItem ? { ...lastItem.background } : {
+        type: '', // color or image or video
+        value: '',
       },
       sequence: newSequence
     };
