@@ -54,17 +54,17 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
           let width, height;
           if (isWidth) {
             width = Math.max(50, Math.min(primaryValue, maxWidth));
-            height = (width * 720) / 1280;
+            height = width; // Maintain 1:1 aspect ratio
             if (height > maxHeight) {
               height = maxHeight;
-              width = (height * 1280) / 720;
+              width = height; // Keep square aspect ratio
             }
           } else {
             height = Math.max(50, Math.min(primaryValue, maxHeight));
-            width = (height * 1280) / 720;
+            width = height; // Maintain 1:1 aspect ratio
             if (width > maxWidth) {
               width = maxWidth;
-              height = (width * 720) / 1280;
+              height = width; // Keep square aspect ratio
             }
           }
           return { width, height };
@@ -198,7 +198,7 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
 
 const MainContent = ({ selectedItem, setVoiceItems }) => {
   const [characterPosition, setCharacterPosition] = useState({ x: 0, y: 0 });
-  const [characterSize, setCharacterSize] = useState({ width: 480, height: 320 });
+  const [characterSize, setCharacterSize] = useState({ width: 320, height: 320 });
 
   // Initialize character position and size from selectedItem
   useEffect(() => {
