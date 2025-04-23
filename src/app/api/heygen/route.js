@@ -9,6 +9,7 @@ const ENDPOINTS = {
   VOICES: 'voices', // Lấy danh sách voices
   AVATAR_GROUP_LIST:"avatar_group.list",
   AVATAR_GROUP_DETAIL:"avatar_group/{group_id}/avatars",
+  VIDEO_GENERATE:"video/generate"
 };
 
 const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
@@ -82,7 +83,6 @@ export async function POST(request) {
       headers: {
         'accept': 'application/json',
         'x-api-key': HEYGEN_API_KEY,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     });

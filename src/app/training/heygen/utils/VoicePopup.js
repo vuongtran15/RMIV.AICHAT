@@ -43,7 +43,8 @@ const VoicePopup = ({ isOpen, onClose, onSelect }) => {
             preview_audio: voice.preview_audio,
             support_pause: voice.support_pause,
             emotion_support: voice.emotion_support,
-            support_interactive_avatar: voice.support_interactive_avatar
+            support_interactive_avatar: voice.support_interactive_avatar,
+            
           }));
         console.log(voices);
         setVoices(voices);

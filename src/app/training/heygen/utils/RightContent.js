@@ -43,6 +43,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       const updatedItem = {
         ...selectedItem,
         character: {
+          ...selectedItem.character,
           avatar_id: character.id,
           avatar_name: character.name,
           preview_image_url: character.thumbnail_url,
@@ -63,6 +64,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       const updatedItem = {
         ...selectedItem,
         voice: {
+          ...selectedItem.voice,
           type: 'text',
           voice_id: voice.id,
           voice_name: voice.name,

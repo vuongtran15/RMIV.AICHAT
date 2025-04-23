@@ -54,17 +54,17 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
           let width, height;
           if (isWidth) {
             width = Math.max(50, Math.min(primaryValue, maxWidth));
-            height = (width * 3) / 4;
+            height = (width * 720) / 1280;
             if (height > maxHeight) {
               height = maxHeight;
-              width = (height * 4) / 3;
+              width = (height * 1280) / 720;
             }
           } else {
             height = Math.max(50, Math.min(primaryValue, maxHeight));
-            width = (height * 4) / 3;
+            width = (height * 1280) / 720;
             if (width > maxWidth) {
               width = maxWidth;
-              height = (width * 3) / 4;
+              height = (width * 720) / 1280;
             }
           }
           return { width, height };
