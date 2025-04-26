@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const HEYGEN_API_KEY = 'YzRhZjAzZDhmYmY2NDQ1Mjg5YjMyMDI0MWJkYTJlYzQtMTc0MzIyNzE3OQ==';
+const HEYGEN_API_KEY = 'ZDZmZTQxZWUwMGUwNGJhM2I3OTk1YWNkZWYyNTA0NTUtMTc0MzU2Mzg1NQ==';
 const HEYGEN_API_URL = 'https://api.heygen.com/v2';
 
 // Endpoints cụ thể theo tài liệu Heygen API
@@ -9,6 +9,7 @@ const ENDPOINTS = {
   VOICES: 'voices', // Lấy danh sách voices
   AVATAR_GROUP_LIST:"avatar_group.list",
   AVATAR_GROUP_DETAIL:"avatar_group/{group_id}/avatars",
+  VIDEO_GENERATE:"video/generate"
 };
 
 const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
@@ -81,12 +82,12 @@ export async function POST(request) {
       method: 'POST',
       headers: {
         'accept': 'application/json',
-        'x-api-key': HEYGEN_API_KEY,
         'Content-Type': 'application/json',
+        'x-api-key': HEYGEN_API_KEY,
       },
       body: JSON.stringify(body),
     });
-
+    
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || `HeyGen API error: ${response.status}`);
@@ -95,7 +96,7 @@ export async function POST(request) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error('HeyGen API error:', error);
+    console.error(error);
     return NextResponse.json({ 
       error: 'Failed to post to Heygen API',
       details: error.message 

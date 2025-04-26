@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import { FiTrash2, FiPlusCircle } from 'react-icons/fi';
+import { FiTrash2, FiPlusCircle, FiVolumeX } from 'react-icons/fi';
 
 const MAX_ITEMS = 20;
 
-export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, setSelectedItem }) {
+export default function LeftContent({ title, setTitle, voiceItems, setVoiceItems, selectedItem, setSelectedItem }) {
   const [openMenuId, setOpenMenuId] = useState(null);
-  const [title, setTitle] = useState('Untitled Video');
   const textareaRefs = useRef({});
 
   const adjustTextareaHeight = (textarea) => {
@@ -18,10 +17,20 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
   };
 
   const handleTextChange = (id, newText) => {
+    const item = voiceItems.find(item => item.id === id);
+    const isSilence = item.voice.type === 'silence';
 
-    var updatedItems = voiceItems.map(item => 
-      item.id === id ? { ...item, voice: { ...item.voice, input_text: newText } } : item
-    );
+    if (isSilence) {
+      // Convert input to number and validate between 1-100
+      const duration = Math.min(Math.max(parseInt(newText) || 0, 1), 100);
+      var updatedItems = voiceItems.map(item =>
+        item.id === id ? { ...item, voice: { ...item.voice, duration } } : item
+      );
+    } else {
+      var updatedItems = voiceItems.map(item =>
+        item.id === id ? { ...item, voice: { ...item.voice, input_text: newText } } : item
+      );
+    }
 
     setVoiceItems(updatedItems);
     setSelectedItem(updatedItems.find(item => item.id === id));
@@ -59,11 +68,17 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
         preview_image_url: '',
       },
       voice: lastItem ? { ...lastItem.voice } : {
+        // type: 'text', // text only
         voice_id: '',
         voice_name: '',
         language: '',
-        preview_audio: '',
         input_text: '',
+        preview_audio: '',
+        duration: 0,
+      },
+      background: lastItem ? { ...lastItem.background } : {
+        type: '', // color or image or video
+        value: '',
       },
       sequence: newSequence
     };
@@ -82,6 +97,37 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
       id: newId,
       character: { ...currentItem.character },
       voice: { ...currentItem.voice, input_text: '' },
+      sequence: voiceItems[currentIndex].sequence + 1
+    };
+
+    setVoiceItems(items => {
+      const newItems = [...items];
+      newItems.splice(currentIndex + 1, 0, newItem);
+      return newItems.map((item, index) => ({
+        ...item,
+        sequence: index + 1
+      }));
+    });
+    setOpenMenuId(null);
+  };
+
+  const handleInsertSilenceVoice = (currentId) => {
+    if (voiceItems.length >= MAX_ITEMS) {
+      alert(`Maximum limit of ${MAX_ITEMS} items reached`);
+      return;
+    }
+    const currentIndex = voiceItems.findIndex(item => item.id === currentId);
+    const currentItem = voiceItems[currentIndex];
+    const newId = Math.max(...voiceItems.map(item => item.id)) + 1;
+    const newItem = {
+      id: newId,
+      character: { ...currentItem.character },
+      voice: {
+        type: 'silence',
+        input_text: '',
+        duration: 1 // Default silence duration of 1 second
+      },
+      background: { ...currentItem.background },
       sequence: voiceItems[currentIndex].sequence + 1
     };
 
@@ -126,15 +172,14 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
           placeholder="Enter video title..."
         />
       </div>
-      
+
       <div className="flex-1 overflow-y-auto px-4 [&::-webkit-scrollbar]:w-[1px] [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
         <div className="space-y-4 pr-2">
           {voiceItems.map((item) => (
-            <div 
-              key={item.id} 
-              className={`flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer ${
-                selectedItem?.id === item.id ? 'bg-gray-100' : ''
-              }`}
+            <div
+              key={item.id}
+              className={`flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer ${selectedItem?.id === item.id ? 'bg-gray-100' : ''
+                }`}
               onClick={() => setSelectedItem(item)}
             >
               <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-gray-600">
@@ -145,8 +190,8 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                   {item.character.avatar_id ? (
                     <div className="w-8 h-8 bg-gray-100 rounded-full">
                       {item.character.preview_image_url && (
-                        <img 
-                          src={item.character.preview_image_url} 
+                        <img
+                          src={item.character.preview_image_url}
                           alt={item.character.avatar_name}
                           className="w-full h-full rounded-full object-cover"
                         />
@@ -156,23 +201,27 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                     <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-xs text-gray-500">
                     </div>
                   )}
-                  <span className="font-medium text-gray-700">
-                    {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}{item.voice.language ? ` (${item.voice.language})` : ''}
-                  </span>
+                  {item.voice.type === 'silence' ? <span className='font-medium text-gray-700'>Silence {item.voice.duration}s</span> :
+                    <span className="font-medium text-gray-700">
+                      {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}{item.voice.language ? ` (${item.voice.language})` : ''}
+                    </span>}
+
+
+
                 </div>
                 <div className="mt-2">
                   <textarea
                     ref={el => textareaRefs.current[item.id] = el}
-                    value={item.voice.input_text}
+                    value={item.voice.type === 'silence' ? item.voice.duration : item.voice.input_text}
                     onChange={(e) => handleTextChange(item.id, e.target.value)}
                     className="w-full p-2 text-gray-600 outline-none resize-none bg-transparent focus:bg-gray-50 rounded-md transition-colors duration-200 overflow-hidden"
-                    placeholder="Enter text for voice generation..."
+                    placeholder={item.voice.type === 'silence' ? "Enter silence duration (1-100s)..." : "Enter text for voice generation..."}
                     rows={1}
                   />
                 </div>
               </div>
               <div className="relative">
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setOpenMenuId(openMenuId === item.id ? null : item.id);
@@ -181,7 +230,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                 >
                   <BsThreeDotsVertical className="w-5 h-5 text-gray-400" />
                 </button>
-                
+
                 {openMenuId === item.id && (
                   <div className="absolute right-0 mt-1 w-40 bg-white rounded-md shadow-lg py-1 z-10 dropdown-menu border border-gray-200">
                     <button
@@ -190,6 +239,13 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
                     >
                       <FiPlusCircle className="mr-3 w-4 h-4" />
                       Insert After
+                    </button>
+                    <button
+                      onClick={() => handleInsertSilenceVoice(item.id)}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+                    >
+                      <FiVolumeX className="mr-3 w-4 h-4" />
+                      Add Silence
                     </button>
                     <button
                       onClick={(e) => handleDeleteItem(item.id, e)}
@@ -208,7 +264,7 @@ export default function LeftContent({ voiceItems, setVoiceItems, selectedItem, s
 
       <div className="p-4 border-t border-gray-200 bg-white">
         <div className="flex space-x-3">
-          <button 
+          <button
             onClick={handleAddItem}
             className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
           >

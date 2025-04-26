@@ -19,6 +19,9 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       
       return;
     }
+    if (selectedItem.voice.type === 'silence') {
+      return;
+    }
     setActiveTab('avatar');
     setIsAvatarPopupOpen(true);
   };
@@ -26,6 +29,9 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
   const handleVoiceClick = () => {
     if (!selectedItem) {
       
+      return;
+    }
+    if (selectedItem.voice.type === 'silence') {
       return;
     }
     setActiveTab('voice');
@@ -37,6 +43,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       const updatedItem = {
         ...selectedItem,
         character: {
+          ...selectedItem.character,
           avatar_id: character.id,
           avatar_name: character.name,
           preview_image_url: character.thumbnail_url,
@@ -57,6 +64,8 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       const updatedItem = {
         ...selectedItem,
         voice: {
+          ...selectedItem.voice,
+          type: 'text',
           voice_id: voice.id,
           voice_name: voice.name,
           language: voice.language,
@@ -88,7 +97,6 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
           item.id === selectedItem.id ? updatedItem : item
         )
       );
-      console.log(updatedItem);
       setSelectedItem(updatedItem);
     }
     setIsMediaPopupOpen(false);
@@ -132,7 +140,7 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
       </div>
 
       {/* Main Container */}
-      <MainContent selectedItem={selectedItem} />
+      <MainContent selectedItem={selectedItem} setVoiceItems={setVoiceItems} />
 
       {/* Footer Section */}
       <div className="h-32 border-t border-gray-200 bg-white rounded mt-4">
@@ -151,7 +159,14 @@ const RightContent = ({ voiceItems, setVoiceItems, selectedItem, setSelectedItem
                 </div>
                 <div>
                   <p className="text-sm font-medium">
-                    {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}
+
+                    {item.voice.type === 'silence' ? <span className='font-medium text-gray-700'>Silence {item.voice.duration}s</span>:
+                    <span className="font-medium text-gray-700">
+                      {item.character.avatar_name || 'No Character'} - {item.voice.voice_name || 'No Voice'}
+                    </span>}
+
+
+                    
                   </p>
                   <p className="text-xs text-gray-500 truncate max-w-[100px]">{item.voice.input_text}</p>
                 </div>

@@ -53,43 +53,60 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
         // Get the main content box boundaries
         const mainContentBox = document.getElementById('main-content-box');
         if (!mainContentBox) return;
-        
+
         const boxRect = mainContentBox.getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();
-        
+
         // Calculate maximum allowed dimensions based on current position
         const maxWidth = boxRect.width - position.x;
         const maxHeight = boxRect.height - position.y;
 
+        const calculateDimensions = (primaryValue, isWidth) => {
+          let width, height;
+          if (isWidth) {
+            width = Math.max(50, Math.min(primaryValue, maxWidth));
+            height = width; // Maintain 1:1 aspect ratio
+            if (height > maxHeight) {
+              height = maxHeight;
+              width = height; // Keep square aspect ratio
+            }
+          } else {
+            height = Math.max(50, Math.min(primaryValue, maxHeight));
+            width = height; // Maintain 1:1 aspect ratio
+            if (width > maxWidth) {
+              width = maxWidth;
+              height = width; // Keep square aspect ratio
+            }
+          }
+          return { width, height };
+        };
+
         switch (resizeDirection) {
           case 'n':
-            newHeight = Math.max(50, Math.min(resizeStart.height - deltaY, position.y + resizeStart.height));
+          case 's': {
+            const height = resizeStart.height + (resizeDirection === 'n' ? -deltaY : deltaY);
+            ({ width: newWidth, height: newHeight } = calculateDimensions(height, false));
             break;
-          case 's':
-            newHeight = Math.max(50, Math.min(resizeStart.height + deltaY, maxHeight));
-            break;
+          }
           case 'e':
-            newWidth = Math.max(50, Math.min(resizeStart.width + deltaX, maxWidth));
+          case 'w': {
+            const width = resizeStart.width + (resizeDirection === 'w' ? -deltaX : deltaX);
+            ({ width: newWidth, height: newHeight } = calculateDimensions(width, true));
             break;
-          case 'w':
-            newWidth = Math.max(50, Math.min(resizeStart.width - deltaX, position.x + resizeStart.width));
-            break;
+          }
           case 'ne':
-            newWidth = Math.max(50, Math.min(resizeStart.width + deltaX, maxWidth));
-            newHeight = Math.max(50, Math.min(resizeStart.height - deltaY, position.y + resizeStart.height));
-            break;
           case 'nw':
-            newWidth = Math.max(50, Math.min(resizeStart.width - deltaX, position.x + resizeStart.width));
-            newHeight = Math.max(50, Math.min(resizeStart.height - deltaY, position.y + resizeStart.height));
-            break;
           case 'se':
-            newWidth = Math.max(50, Math.min(resizeStart.width + deltaX, maxWidth));
-            newHeight = Math.max(50, Math.min(resizeStart.height + deltaY, maxHeight));
+          case 'sw': {
+            if (resizeDirection.includes('n') || resizeDirection.includes('s')) {
+              const height = resizeStart.height + (resizeDirection.includes('n') ? -deltaY : deltaY);
+              ({ width: newWidth, height: newHeight } = calculateDimensions(height, false));
+            } else {
+              const width = resizeStart.width + (resizeDirection.includes('w') ? -deltaX : deltaX);
+              ({ width: newWidth, height: newHeight } = calculateDimensions(width, true));
+            }
             break;
-          case 'sw':
-            newWidth = Math.max(50, Math.min(resizeStart.width - deltaX, position.x + resizeStart.width));
-            newHeight = Math.max(50, Math.min(resizeStart.height + deltaY, maxHeight));
-            break;
+          }
         }
 
         onSizeChange({
@@ -100,22 +117,22 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
       }
 
       if (!isDragging) return;
-      
+
       const newX = e.clientX - dragStart.x;
       const newY = e.clientY - dragStart.y;
-      
+
       const mainContentBox = document.getElementById('main-content-box');
       if (!mainContentBox) return;
-      
+
       const boxRect = mainContentBox.getBoundingClientRect();
       const elementRect = element.getBoundingClientRect();
-      
+
       const maxX = boxRect.width - elementRect.width;
       const maxY = boxRect.height - elementRect.height;
-      
+
       const boundedX = Math.max(0, Math.min(newX, maxX));
       const boundedY = Math.max(0, Math.min(newY, maxY));
-      
+
       onPositionChange({
         x: boundedX,
         y: boundedY
@@ -165,7 +182,7 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
         boxSizing: 'border-box'
       }}
     >
-      <div 
+      <div
         className="w-full h-full"
         style={{
           cursor: isDragging ? 'grabbing' : 'grab'
@@ -190,55 +207,23 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
   );
 };
 
-const MainContent = ({ selectedItem, onUpdateItem }) => {
-  const [characterPosition, setCharacterPosition] = useState(selectedItem?.character?.position || { x: 0, y: 0 });
-  const [characterSize, setCharacterSize] = useState(selectedItem?.character?.size || { width: 200, height: 200 });
-  const [contentBoxSize, setContentBoxSize] = useState({ width: 0, height: 0 });
-  const contentBoxRef = useRef(null);
+const MainContent = ({ selectedItem, setVoiceItems }) => {
+  const [characterPosition, setCharacterPosition] = useState({ x: 0, y: 0 });
+  const [characterSize, setCharacterSize] = useState({ width: 320, height: 320 });
 
-  // Update character position and size when selectedItem changes
+  // Initialize character position and size from selectedItem
   useEffect(() => {
-    if (selectedItem?.character) {
-      setCharacterPosition(selectedItem.character.position || { x: 0, y: 0 });
-      setCharacterSize(selectedItem.character.size || { width: 200, height: 200 });
+    if (selectedItem?.character?.position) {
+      setCharacterPosition(selectedItem.character.position);
     }
-  }, [selectedItem]);
-
-  // Load saved content box size on component mount
-  useEffect(() => {
-    const savedContentBoxSize = localStorage.getItem('content_box_size');
-    if (savedContentBoxSize) {
-      setContentBoxSize(JSON.parse(savedContentBoxSize));
+    if (selectedItem?.character?.size) {
+      setCharacterSize(selectedItem.character.size);
     }
-  }, []);
-
-  // Save content box size whenever it changes
-  useEffect(() => {
-    if (contentBoxSize.width > 0 && contentBoxSize.height > 0) {
-      localStorage.setItem('content_box_size', JSON.stringify(contentBoxSize));
-    }
-  }, [contentBoxSize]);
-
-  // Update content box size when window resizes
-  useEffect(() => {
-    const updateContentBoxSize = () => {
-      if (contentBoxRef.current) {
-        const { width, height } = contentBoxRef.current.getBoundingClientRect();
-        setContentBoxSize({ width, height });
-      }
-    };
-
-    updateContentBoxSize();
-    window.addEventListener('resize', updateContentBoxSize);
-
-    return () => {
-      window.removeEventListener('resize', updateContentBoxSize);
-    };
-  }, []);
+  }, [selectedItem?.id]); // Only run when selectedItem changes
 
   const getBackgroundStyle = () => {
-    if (!selectedItem?.background) return 'bg-purple-500';
-    
+    if (!selectedItem?.background) return 'bg-white';
+
     switch (selectedItem.background.type) {
       case 'color':
         return {
@@ -249,18 +234,36 @@ const MainContent = ({ selectedItem, onUpdateItem }) => {
       case 'video':
         return 'bg-black';
       default:
-        return 'bg-purple-500';
+        return 'bg-white';
     }
   };
 
-  const handleUpdateCharacter = (updatedCharacter) => {
-    if (onUpdateItem) {
-      onUpdateItem({
-        ...selectedItem,
-        character: updatedCharacter
+  useEffect(() => {
+    // main content box
+    const mainContentBox = document.getElementById('main-content-box');
+    if (!mainContentBox) return;
+
+    setVoiceItems(items => {
+      const updatedItems = items.map(item => {
+        if (item.id === selectedItem.id) {
+          return {
+            ...item, character: {
+              ...item.character,
+              position: characterPosition,
+              size: characterSize,
+              box: {
+                width: mainContentBox.offsetWidth,
+                height: mainContentBox.offsetHeight,
+              }
+            }
+          };
+        }
+        return item;
       });
-    }
-  };
+      return updatedItems;
+    });
+  }, [characterPosition, characterSize, selectedItem, selectedItem?.character?.avatar_id]);
+
 
   return (
     <div className="flex-1 relative overflow-hidden">
@@ -272,37 +275,34 @@ const MainContent = ({ selectedItem, onUpdateItem }) => {
           </div>
         </div>
       ) : (
-        <div 
-          id='main-content-box' 
-          ref={contentBoxRef}
-          className="absolute w-[calc(100%-0rem)] h-[calc(100%-0rem)]"
-        >
-          <div className={`w-full h-full relative ${typeof getBackgroundStyle() === 'string' ? getBackgroundStyle() : ''}`}
-            style={selectedItem?.background?.type === 'color' 
-              ? getBackgroundStyle()
-              : selectedItem?.background?.type === 'image' 
-                ? { backgroundImage: `url(${selectedItem.background.value})` }
-                : {}}>
-            {selectedItem.background?.type === 'video' && (
-              <video 
-                src={selectedItem.background.value}
-                className="absolute inset-0 w-full h-full object-cover"
-                autoPlay
-                loop
-                muted
-              />
-            )}
-            
-            {selectedItem.character && selectedItem.character.preview_image_url && (
-              <DraggableCharacter
-                character={selectedItem.character}
-                position={characterPosition}
-                onPositionChange={setCharacterPosition}
-                size={characterSize}
-                onSizeChange={setCharacterSize}
-                onUpdateCharacter={handleUpdateCharacter}
-              />
-            )}
+        <div className='w-full h-full flex justify-center items-center'>
+          <div id='main-content-box' className="absolute w-[900px] h-[506px]">
+            <div className={`w-full h-full relative ${typeof getBackgroundStyle() === 'string' ? getBackgroundStyle() : ''}`}
+              style={selectedItem?.background?.type === 'color'
+                ? getBackgroundStyle()
+                : selectedItem?.background?.type === 'image'
+                  ? { backgroundImage: `url(${selectedItem.background.value})` }
+                  : {}}>
+              {selectedItem.background?.type === 'video' && (
+                <video
+                  src={selectedItem.background.value}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                />
+              )}
+
+              {selectedItem.character && selectedItem.character.preview_image_url && (
+                <DraggableCharacter
+                  character={selectedItem.character}
+                  position={characterPosition}
+                  onPositionChange={setCharacterPosition}
+                  size={characterSize}
+                  onSizeChange={setCharacterSize}
+                />
+              )}
+            </div>
           </div>
         </div>
       )}

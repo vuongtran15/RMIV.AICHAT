@@ -26,7 +26,6 @@ const AvatarPopup = ({ isOpen, onClose, onSelect }) => {
         }
         const data = await response.json();
         //{ "avatar_id": "Abigail_expressive_2024112501", "avatar_name": "Abigail (Upper Body)", "gender": "female", "preview_image_url": "https://files2.heygen.ai/avatar/v3/1ad51ab9fee24ae88af067206e14a1d8_44250/preview_target.webp", "preview_video_url": "https://files2.heygen.ai/avatar/v3/1ad51ab9fee24ae88af067206e14a1d8_44250/preview_video_target.mp4", "premium": false, "type": null, "tags": null, "default_voice_id": null }
-        console.log(data.data.avatars);
         var characters = data.data.avatars
           .filter(character => character.premium === false)
           .map(character => ({
@@ -39,7 +38,6 @@ const AvatarPopup = ({ isOpen, onClose, onSelect }) => {
         setCharacters(characters);
         setHasMore(characters.length > ITEMS_PER_PAGE);
       } catch (err) {
-        console.error('Error fetching characters:', err);
         setError('Failed to load characters. Please try again later.');
       } finally {
         setIsLoading(false);
