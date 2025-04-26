@@ -65,17 +65,17 @@ const DraggableCharacter = ({ character, position, onPositionChange, size, onSiz
           let width, height;
           if (isWidth) {
             width = Math.max(50, Math.min(primaryValue, maxWidth));
-            height = width; // Maintain 1:1 aspect ratio
+            height = (width * 720) / 1280; // Calculate height based on 16:9 ratio
             if (height > maxHeight) {
               height = maxHeight;
-              width = height; // Keep square aspect ratio
+              width = (height * 1280) / 720; // Recalculate width if height exceeds max
             }
           } else {
             height = Math.max(50, Math.min(primaryValue, maxHeight));
-            width = height; // Maintain 1:1 aspect ratio
+            width = (height * 1280) / 720; // Calculate width based on 16:9 ratio
             if (width > maxWidth) {
               width = maxWidth;
-              height = width; // Keep square aspect ratio
+              height = (width * 720) / 1280; // Recalculate height if width exceeds max
             }
           }
           return { width, height };
