@@ -1,111 +1,104 @@
 'use client';
 
-import { useState } from 'react';
-import LeftContent from './utils/LeftContent';
-import RightContent from './utils/RightContent';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function HeygenPage() {
-  const [title, setTitle] = useState(''); 
-  const [voiceItems, setVoiceItems] = useState([
-    {
-      id: 1,
-      character: {
-        avatar_id: '',
-        avatar_id: '',
-        preview_image_url: '',
-      },
-      voice: {
-        // type: 'text', // text only or silence
-        voice_id: '',
-        voice_name: '',
-        language: '',
-        input_text: '',
-        preview_audio: '',
-        duration: 0,
-      },
-      background: {
-        type: '', // color or image or video
-        value: '',
-      },
-      sequence: 1
-    },
-  ]);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const fnGenerateVideo = async () => {
-    
-    var dimension = { width: 1280, height: 720 };
-    voiceItems.forEach(item => {
-      const scalingFactor = calculateAverageScalingFactor(item.character.box, item.character.size);
-      item.character.type = 'avatar';
-      item.character.scale = scalingFactor;
-      item.character.offset = calculateNormalizedOffset(item.character.box, item.character.position);
-    });
-    var body = {
-      title: title,
-      dimension: dimension,
-      caption: true,
-      video_inputs: voiceItems
-    }
-    console.log(body);
-    const response = await fetch('/api/heygen?endpoint=VIDEO_GENERATE', {
-      method: 'POST',
-      body: JSON.stringify(body)
-    });
-    const data = await response.json();
-  }
+  useEffect(() => {
+    fetchVideos();
+  }, []);
 
-  const calculateAverageScalingFactor = (box, size) => {
-    if (!box || !size || !box.width || !box.height || !size.width || !size.height || box.width === 0 || box.height === 0) {
-      throw new Error("Invalid input: Box and size must have valid width and height properties.");
+  const fetchVideos = async () => {
+    try {
+      const response = await fetch('/api/heygen?endpoint=VIDEO_LIST');
+      const data = await response.json();
+      setVideos(data.videos || []);
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+    } finally {
+      setLoading(false);
     }
-    const widthScaling = size.width / box.width;
-    const heightScaling = size.height / box.height;
-    return Number(((widthScaling + heightScaling) / 2).toFixed(2));
-  }
+  };
 
-  const calculateNormalizedOffset = (box, position) => {
-    if (!box || !position || !box.width || !box.height || !position.x || !position.y || box.width === 0 || box.height === 0) {
-        throw new Error("Invalid input: Box must have valid width and height, and position must have valid x and y.");
-    }
-    const xNormalized = -1 + (position.x * 2) / box.width;
-    const yNormalized = -1 + (position.y * 2) / box.height;
-    return { x: xNormalized.toFixed(2), y: yNormalized.toFixed(2) };
-}
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      'pending': { color: 'bg-yellow-100 text-yellow-800', text: 'Pending' },
+      'processing': { color: 'bg-blue-100 text-blue-800', text: 'Processing' },
+      'completed': { color: 'bg-green-100 text-green-800', text: 'Completed' },
+      'failed': { color: 'bg-red-100 text-red-800', text: 'Failed' }
+    };
+
+    const config = statusConfig[status] || { color: 'bg-gray-100 text-gray-800', text: 'Unknown' };
+    return (
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
+        {config.text}
+      </span>
+    );
+  };
 
   return (
-    <div className="w-full h-full">
-      <div id='video-generator-title' className="flex justify-between items-center mb-6 border-b border-pink-100 pb-4">
-        <h1 className="text-2xl font-bold text-gray-800">
-          HeyGen Video Generator
-        </h1>
-        <button
-          className="flex items-center cursor-pointer h-11 gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg active:shadow-sm relative pl-10"
-          onClick={fnGenerateVideo}
+    <div className="w-full h-full p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">HeyGen Videos</h1>
+        <Link 
+          href="/training/heygen/detail"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
         >
-          <span className="absolute left-3 w-5 h-5 before:content-[''] before:absolute before:w-3 before:h-3 before:border-2 before:border-white before:rounded before:top-1 before:left-1 after:content-[''] after:absolute after:w-0 after:h-0 after:border-t-[6px] after:border-t-transparent after:border-l-[10px] after:border-l-white after:border-b-[6px] after:border-b-transparent after:top-[6px] after:left-[10px]"></span>
-          Generate Video
-        </button>
+          Create New Video
+        </Link>
       </div>
 
-      <div className="flex w-full h-[calc(100%-4rem)]">
-        <LeftContent
-          title={title}
-          setTitle={setTitle}
-          voiceItems={voiceItems}
-          setVoiceItems={setVoiceItems}
-          selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem}
-        />
-        <div className="w-3/5 p-4 bg-gray-100">
-          <RightContent
-            voiceItems={voiceItems}
-            setVoiceItems={setVoiceItems}
-            selectedItem={selectedItem}
-            setSelectedItem={setSelectedItem}
-          />
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
-      </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {videos.map((video) => (
+                <tr key={video.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{video.title}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {getStatusBadge(video.status)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(video.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Link 
+                      href={`/training/heygen/detail/${video.id}`}
+                      className="text-blue-600 hover:text-blue-900"
+                    >
+                      View Details
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+              {videos.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+                    No videos found. Create your first video!
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
